@@ -1,0 +1,42 @@
+{
+  "sections": [
+    {
+      "id": "software",
+      "title": "Software",
+      "subsections": [
+        {
+          "id": "drivetrain-code",
+          "title": "Drivetrain Code",
+          "subsections": [
+            {
+              "id": "iteration-1",
+              "title": "Iteration 1",
+              "date": "2026-09-18",
+              "author": "Aaron",
+              "content": "In our first iteration of the drivetrain code, we implemented basic mecanum control logic using field-centric navigation. The primary goal was to ensure smooth strafing and consistent odometry tracking. We utilized a custom PID controller for rotational stability, which significantly reduced drift during high-speed translation. Moving forward, we plan to tune the feedforward constants to account for the chassis' weight distribution."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hardware",
+      "title": "Hardware",
+      "subsections": [
+        {
+          "id": "intake",
+          "title": "Active Intake System",
+          "subsections": [
+            {
+              "id": "prototyping-phase",
+              "title": "Prototyping Phase",
+              "date": "2026-09-20",
+              "author": "Sarah",
+              "content": "Initial tests with compliant wheels showed promise, but we encountered slipping when acquiring elements from off-angles. We tested different durometer wheels (35A vs 50A) and found that a mixed setup provides the best grip-to-slip ratio. The intake geometry was adjusted to a 30-degree approach angle, reducing the time required to securely grab a pixel by 40%."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+import fs from 'fs';
+import path from 'path';
+
+const siteUrl = 'https://swervo26256.com'; // Change to actual production URL
+
+const staticRoutes = [
+  '/',
+  '/gallery',
+  '/portfolio',
+  '/robot',
+  '/team',
+  '/sponsors',
+  '/stats',
+  '/contact',
+  '/registration',
+  '/notebook'
+];
+
+function generateNotebookRoutes(data, basePath = '/notebook') {
+  let routes = [];
+  
+  const processNode = (node, currentPath) => {
+    routes.push(currentPath);
+    
+    const children = node.subsections || node.sections || [];
+    for (const child of children) {
+      processNode(child, `${currentPath}/${child.id}`);
+    }
+  };
+  
+  if (data.sections) {
+    for (const section of data.sections) {
+      processNode(section, `${basePath}/${section.id}`);
+    }
+  }
+  
+  return routes;
+}
+
+try {
+  const notebookData = JSON.parse(fs.readFileSync('./public/notebook.json', 'utf-8'));
+  const dynamicRoutes = generateNotebookRoutes(notebookData);
+  const allRoutes = [...staticRoutes, ...dynamicRoutes];
+  
+  const today = new Date().toISOString().split('T')[0];
+  
+  const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allRoutes.map(route => `  <url>
+    <loc>${siteUrl}${route}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${route === '/' || route.includes('/notebook') ? 'weekly' : 'monthly'}</changefreq>
+    <priority>${route === '/' ? '1.0' : '0.8'}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+  fs.writeFileSync('./public/sitemap.xml', sitemapContent);
+  console.log('Successfully generated sitemap.xml with', allRoutes.length, 'routes.');
+} catch (error) {
+  console.error('Error generating sitemap:', error);
+}
