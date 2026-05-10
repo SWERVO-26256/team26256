@@ -31,10 +31,24 @@ function Home() {
         <div className="hero-visual">
           <div className="logo-hero-container">
             <div className="wireframe-glow" style={{ borderRadius: '50%' }}></div>
-            <img 
+            <img
               src="/assets/swervologo.jpg"
-              alt="SWERVO 26256 Logo" 
-              className="logo-hero-img" 
+              alt="SWERVO 26256 Logo"
+              className="logo-hero-img"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                borderRadius: '50%',
+                display: 'block',
+              }}
+              onError={(e) => {
+                // Fallback: show a placeholder if image fails to load
+                e.target.style.display = 'none';
+                e.target.parentElement.style.background =
+                  'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+              }}
             />
           </div>
         </div>

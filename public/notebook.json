@@ -23,7 +23,7 @@
               "id": "drivetrain-iteration-1",
               "title": "Iteration 1",
               "date": "2026-09-18",
-              "author": "Aaron",
+              "author": "n/a",
               "content": "Today we wrote the initial mecanum drive code using the [REV Control Hub] and tested encoder feedback. The primary goal was to ensure smooth strafing and consistent odometry tracking. We utilized a custom PID controller for rotational stability.",
               "links": {
                 "REV Control Hub": "hardware-control-hub",
@@ -41,7 +41,7 @@
               "id": "software-encoders",
               "title": "Encoder Calibration",
               "date": "2026-09-22",
-              "author": "Aaron",
+              "author": "n/a",
               "content": "We implemented dead-wheel odometry to accurately track robot position regardless of wheel slip. Calibrating the track width took several attempts, but we finally achieved a precision of +/- 1cm over a full field translation.",
               "links": {}
             }
@@ -64,7 +64,7 @@
               "id": "intake-prototyping-phase",
               "title": "Prototyping Phase",
               "date": "2026-09-20",
-              "author": "Sarah",
+              "author": "n/a",
               "content": "Initial tests with compliant wheels showed promise, but we encountered slipping when acquiring elements from off-angles. We adjusted the geometry to a 30-degree approach angle.",
               "links": {}
             }
@@ -79,7 +79,7 @@
               "id": "hardware-control-hub",
               "title": "REV Control Hub Mounting",
               "date": "2026-09-15",
-              "author": "Sarah",
+              "author": "n/a",
               "content": "We securely mounted the REV Control Hub centrally to ensure the IMU is perfectly aligned with the robot's center of rotation. Wiring was routed cleanly to avoid entanglement with moving mechanisms.",
               "links": {}
             }
