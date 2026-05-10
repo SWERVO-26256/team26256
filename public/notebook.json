@@ -12,10 +12,12 @@
       "id": "software",
       "title": "Software",
       "icon": "code",
+      "content": "Welcome to the Software directory. Here you will find all of our code iterations, control algorithms, and odometry mathematics.",
       "subsections": [
         {
           "id": "drivetrain-code",
           "title": "Drivetrain Code",
+          "content": "This folder contains all iterations of our Mecanum drive subsystem code, from early prototyping to our final PID implementations.",
           "subsections": [
             {
               "id": "drivetrain-iteration-1",
@@ -33,6 +35,7 @@
         {
           "id": "sensors",
           "title": "Sensors & Logic",
+          "content": "Documentation regarding sensor integration, logic flows, and hardware-software communication protocols.",
           "subsections": [
             {
               "id": "software-encoders",
@@ -50,10 +53,12 @@
       "id": "hardware",
       "title": "Hardware",
       "icon": "tool",
+      "content": "Welcome to the Hardware directory. Here you will find our physical iterations, CAD prototypes, and mechanical reasoning.",
       "subsections": [
         {
           "id": "intake",
           "title": "Active Intake System",
+          "content": "Intake geometry research, material selection, and speed calculations.",
           "subsections": [
             {
               "id": "intake-prototyping-phase",
@@ -68,6 +73,7 @@
         {
           "id": "electronics",
           "title": "Electronics",
+          "content": "Custom circuit boards, cable management, and power distribution diagrams.",
           "subsections": [
             {
               "id": "hardware-control-hub",
