@@ -54,8 +54,8 @@ ${allRoutes.map(route => `  <url>
   </url>`).join('\n')}
 </urlset>`;
 
-  fs.writeFileSync('./public/sitemap.xml', sitemapContent);
-  console.log('Successfully generated sitemap.xml with', allRoutes.length, 'routes.');
+  fs.writeFileSync('./public/sitemap-latest.xml', sitemapContent);
+  console.log('Successfully generated sitemap-latest.xml with', allRoutes.length, 'routes.');
 } catch (error) {
   console.error('Error generating sitemap:', error);
 }
