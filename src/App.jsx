@@ -12,6 +12,7 @@ import Contact from './pages/Contact';
 import Stats from './pages/Stats';
 import Registration from './pages/Registration';
 import Notebook from './pages/Notebook';
+import NotFound from './pages/NotFound';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,6 +43,7 @@ function MainApp() {
           <Route path="/registration" element={<Registration />} />
           <Route path="/notebook/*" element={<Notebook />} />
           <Route path="/notebook" element={<Notebook />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       {!isNotebook && <Footer />}
