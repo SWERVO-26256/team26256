@@ -206,10 +206,16 @@ function Notebook() {
             right: '16px', 
             zIndex: 100, 
             display: 'none',
-            background: 'var(--bg-surface)',
-            padding: '8px',
+            background: 'var(--gold)',
+            color: 'var(--bg-navy)',
+            padding: '10px 12px',
             borderRadius: '6px',
-            border: '1px solid var(--border-dark)'
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: '700',
+            fontSize: '18px',
+            lineHeight: 1,
+            boxShadow: '0 2px 12px rgba(0,0,0,0.4)'
           }}
         >
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
