@@ -13,7 +13,6 @@ import Stats from './pages/Stats';
 import Registration from './pages/Registration';
 import Notebook from './pages/Notebook';
 
-// Component to scroll to top on route change
 function ScrollToTop() {
   const { pathname } = useLocation();
   React.useEffect(() => {
@@ -22,12 +21,15 @@ function ScrollToTop() {
   return null;
 }
 
-function App() {
+function MainApp() {
+  const { pathname } = useLocation();
+  const isNotebook = pathname.startsWith('/notebook');
+
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <Header />
-      <main className="container">
+      <main className={isNotebook ? '' : 'container'}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gallery" element={<Gallery />} />
@@ -39,9 +41,18 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/notebook/*" element={<Notebook />} />
+          <Route path="/notebook" element={<Notebook />} />
         </Routes>
       </main>
-      <Footer />
+      {!isNotebook && <Footer />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <MainApp />
     </Router>
   );
 }

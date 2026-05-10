@@ -4,11 +4,19 @@ import { ChevronRight, ChevronDown, Folder, FolderOpen, FileText, Menu, X, Arrow
 
 // Recursive Tree Node Component
 const TreeNode = ({ node, activeId, expandedFolders, toggleFolder }) => {
-  const isEntry = !!node.content;
+  const hasChildren = node.subsections && node.subsections.length > 0;
+  const hasContent = !!node.content;
   const isExpanded = expandedFolders.has(node.id);
   const isActive = activeId === node.id;
 
-  if (isEntry) {
+  const handleToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFolder(node.id);
+  };
+
+  if (!hasChildren) {
+    // Leaf node (pure file)
     return (
       <Link 
         to={`/notebook/${node.id}`}
@@ -32,32 +40,63 @@ const TreeNode = ({ node, activeId, expandedFolders, toggleFolder }) => {
     );
   }
 
-  // Folder
+  // Folder (may or may not have content)
   return (
     <div style={{ paddingLeft: '8px', marginBottom: '2px' }}>
-      <div 
-        onClick={() => toggleFolder(node.id)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '6px 8px',
-          cursor: 'pointer',
-          color: 'var(--text-primary)',
-          borderRadius: '4px',
-          fontSize: '14px',
-          transition: 'background 0.2s'
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-      >
-        {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-        {isExpanded ? <FolderOpen size={16} style={{ color: 'var(--gold)' }} /> : <Folder size={16} style={{ color: 'var(--gold)' }} />}
-        <span style={{ fontWeight: '500' }}>{node.title}</span>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div onClick={handleToggle} style={{ cursor: 'pointer', padding: '6px 4px', color: 'var(--text-secondary)' }}>
+           {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+        </div>
+        
+        {hasContent ? (
+          <Link 
+            to={`/notebook/${node.id}`}
+            onClick={() => { if (!isExpanded) toggleFolder(node.id); }} // auto expand if not
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 8px',
+              textDecoration: 'none',
+              color: isActive ? 'var(--gold)' : 'var(--text-primary)',
+              background: isActive ? 'rgba(255, 215, 0, 0.05)' : 'transparent',
+              borderRadius: '4px',
+              fontSize: '14px',
+              flexGrow: 1,
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+            onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+          >
+            {isExpanded ? <FolderOpen size={16} style={{ color: 'var(--gold)' }} /> : <Folder size={16} style={{ color: 'var(--gold)' }} />}
+            <span style={{ fontWeight: isActive ? '600' : '500' }}>{node.title}</span>
+          </Link>
+        ) : (
+          <div 
+            onClick={handleToggle}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 8px',
+              cursor: 'pointer',
+              color: 'var(--text-primary)',
+              fontSize: '14px',
+              flexGrow: 1,
+              borderRadius: '4px',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            {isExpanded ? <FolderOpen size={16} style={{ color: 'var(--gold)' }} /> : <Folder size={16} style={{ color: 'var(--gold)' }} />}
+            <span style={{ fontWeight: '500' }}>{node.title}</span>
+          </div>
+        )}
       </div>
       
-      {isExpanded && node.subsections && (
-        <div style={{ borderLeft: '1px solid var(--border-dark)', marginLeft: '16px', marginTop: '4px' }}>
+      {isExpanded && (
+        <div style={{ borderLeft: '1px solid var(--border-dark)', marginLeft: '12px', paddingLeft: '8px', marginTop: '4px' }}>
           {node.subsections.map((child, i) => (
             <TreeNode 
               key={i} 
@@ -79,17 +118,15 @@ function Notebook() {
   const [expandedFolders, setExpandedFolders] = useState(new Set());
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('/notebook.json')
       .then(res => res.json())
       .then(json => {
         setData(json);
-        // Expand all folders by default, or just root ones
         const allFolderIds = new Set();
         const findFolders = (node) => {
-          if (!node.content && node.id) allFolderIds.add(node.id);
+          if (node.subsections && node.subsections.length > 0 && node.id) allFolderIds.add(node.id);
           const children = node.subsections || node.sections || [];
           children.forEach(findFolders);
         };
@@ -103,6 +140,11 @@ function Notebook() {
       });
   }, []);
 
+  // Close sidebar on navigation (mobile)
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
+
   const toggleFolder = (id) => {
     setExpandedFolders(prev => {
       const next = new Set(prev);
@@ -113,18 +155,16 @@ function Notebook() {
   };
 
   if (loading) {
-    return <section className="page active"><div className="loader">Loading notebook...</div></section>;
+    return <section className="page active" style={{ display: 'block', height: 'calc(100vh - 80px)' }}><div className="loader" style={{margin: '100px auto', display: 'block', textAlign: 'center'}}>Loading notebook...</div></section>;
   }
 
   if (!data) {
-    return <section className="page active"><div className="card"><p>Failed to load notebook.</p></div></section>;
+    return <section className="page active" style={{ display: 'block', height: 'calc(100vh - 80px)' }}><div className="card" style={{margin: '100px auto', maxWidth: '400px'}}><p>Failed to load notebook.</p></div></section>;
   }
 
-  // Determine current active entry ID from URL
   const pathParts = location.pathname.split('/').filter(Boolean);
   const activeId = pathParts.length > 1 ? pathParts[pathParts.length - 1] : null;
 
-  // Flatten entries for Next/Prev navigation
   const entries = [];
   const findEntries = (node) => {
     if (node.content && node.id) {
@@ -144,24 +184,21 @@ function Notebook() {
       currentEntry = entries[currentIndex];
     }
   } else {
-    // Landing page
     currentEntry = data.landing;
   }
 
   const prevEntry = currentIndex > 0 ? entries[currentIndex - 1] : null;
   const nextEntry = currentIndex !== -1 && currentIndex < entries.length - 1 ? entries[currentIndex + 1] : (!activeId && entries.length > 0 ? entries[0] : null);
 
-  // Parse content for links
   const renderContent = (content, links) => {
     if (!content) return null;
-    if (!links || Object.keys(links).length === 0) return <p>{content}</p>;
+    if (!links || Object.keys(links).length === 0) return <p style={{ color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '16px', whiteSpace: 'pre-wrap' }}>{content}</p>;
 
-    // Split by brackets [Anchor Text]
     const regex = /(\[[^\]]+\])/g;
     const parts = content.split(regex);
 
     return (
-      <p style={{ color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '16px' }}>
+      <p style={{ color: 'var(--text-secondary)', lineHeight: '1.8', fontSize: '16px', whiteSpace: 'pre-wrap' }}>
         {parts.map((part, i) => {
           if (part.startsWith('[') && part.endsWith(']')) {
             const anchor = part.slice(1, -1);
@@ -179,7 +216,7 @@ function Notebook() {
                 </Link>
               );
             }
-            return anchor; // if link not found, just render text without brackets
+            return anchor;
           }
           return part;
         })}
@@ -189,16 +226,16 @@ function Notebook() {
 
   return (
     <section className="page fade-in" style={{ display: 'block', padding: 0 }}>
-      {/* Container simulating VS Code / Linear Layout */}
       <div style={{
         display: 'flex',
-        height: 'calc(100vh - 80px)', // subtracting header height
+        height: 'calc(100vh - 80px)',
         borderTop: '1px solid var(--border-dark)',
         position: 'relative',
-        background: 'var(--bg-navy)'
+        background: 'var(--bg-navy)',
+        width: '100%',
+        overflow: 'hidden'
       }}>
         
-        {/* Mobile Sidebar Toggle */}
         <button 
           className="mobile-menu-btn" 
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -207,17 +244,20 @@ function Notebook() {
             top: '16px', 
             right: '16px', 
             zIndex: 100, 
-            display: 'none' // Controlled via CSS media query below but using inline styles for logic mostly
+            display: 'none',
+            background: 'var(--bg-surface)',
+            padding: '8px',
+            borderRadius: '6px',
+            border: '1px solid var(--border-dark)'
           }}
         >
-          {sidebarOpen ? <X /> : <Menu />}
+          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Sidebar */}
         <div 
           className={`notebook-sidebar ${sidebarOpen ? 'open' : ''}`}
           style={{
-            width: '300px',
+            width: '320px',
             flexShrink: 0,
             borderRight: '1px solid var(--border-dark)',
             background: 'rgba(11, 18, 32, 0.95)',
@@ -242,7 +282,8 @@ function Notebook() {
               background: !activeId ? 'rgba(255, 215, 0, 0.05)' : 'transparent',
               borderRadius: '4px',
               marginBottom: '16px',
-              fontWeight: !activeId ? '600' : '500'
+              fontWeight: !activeId ? '600' : '500',
+              fontSize: '14px'
             }}
           >
             <FileText size={16} />
@@ -260,24 +301,23 @@ function Notebook() {
           ))}
         </div>
 
-        {/* Main Content Area */}
         <div style={{
           flexGrow: 1,
           overflowY: 'auto',
           padding: '48px',
-          background: 'var(--bg-surface)'
+          background: 'var(--bg-surface)',
+          width: '100%'
         }}>
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             {currentEntry ? (
               <>
                 <div style={{ marginBottom: '40px' }}>
-                  <h1 style={{ fontSize: '40px', marginBottom: '16px', color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
+                  <h1 style={{ fontSize: '40px', marginBottom: '16px', color: 'var(--text-primary)', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
                     {currentEntry.title}
                   </h1>
                   
-                  {/* Metadata (only for actual entries, not landing) */}
                   {(currentEntry.date || currentEntry.author) && (
-                    <div style={{ display: 'flex', gap: '24px', color: 'var(--text-secondary)', fontSize: '14px', borderBottom: '1px solid var(--border-dark)', paddingBottom: '24px' }}>
+                    <div style={{ display: 'flex', gap: '24px', color: 'var(--text-secondary)', fontSize: '14px', borderBottom: '1px solid var(--border-dark)', paddingBottom: '24px', flexWrap: 'wrap' }}>
                       {currentEntry.date && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span>Date:</span> <strong style={{ color: 'var(--text-primary)' }}>{currentEntry.date}</strong>
@@ -303,15 +343,17 @@ function Notebook() {
                   paddingTop: '24px',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '24px'
                 }}>
-                  <div>
+                  <div style={{ flex: 1 }}>
                     {prevEntry && (
                       <Link 
                         to={`/notebook/${prevEntry.id}`}
-                        style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--gold)'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s', padding: '12px', border: '1px solid var(--border-dark)', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; e.currentTarget.style.borderColor = 'var(--gold)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'var(--border-dark)'; }}
                       >
                         <ArrowLeft size={16} />
                         <div>
@@ -321,15 +363,15 @@ function Notebook() {
                       </Link>
                     )}
                   </div>
-                  <div style={{ textAlign: 'right' }}>
+                  <div style={{ flex: 1, textAlign: 'right', display: 'flex', justifyContent: 'flex-end' }}>
                     {nextEntry && (
                       <Link 
                         to={`/notebook/${nextEntry.id}`}
-                        style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--gold)'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s', padding: '12px', border: '1px solid var(--border-dark)', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; e.currentTarget.style.borderColor = 'var(--gold)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'var(--border-dark)'; }}
                       >
-                        <div>
+                        <div style={{ textAlign: 'right' }}>
                           <div style={{ fontSize: '12px', textTransform: 'uppercase' }}>Next</div>
                           <div style={{ fontWeight: '500' }}>{nextEntry.title}</div>
                         </div>
@@ -354,7 +396,7 @@ function Notebook() {
       <style dangerouslySetInnerHTML={{__html: `
         @media (max-width: 900px) {
           .notebook-sidebar {
-            position: absolute;
+            position: absolute !important;
             left: 0;
             top: 0;
             bottom: 0;
