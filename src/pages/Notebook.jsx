@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
-import { ChevronRight, ChevronDown, Folder, FolderOpen, FileText, Menu, X, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useLocation, Link } from 'react-router-dom';
+import { FolderOpen, FileText, Menu, X, ArrowLeft, ArrowRight } from 'lucide-react';
 
 // Recursive Tree Node Component
-const TreeNode = ({ node, activeId, expandedFolders, toggleFolder }) => {
+const TreeNode = ({ node, activeId }) => {
   const hasChildren = node.subsections && node.subsections.length > 0;
   const hasContent = !!node.content;
-  const isExpanded = expandedFolders.has(node.id);
   const isActive = activeId === node.id;
-
-  const handleToggle = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleFolder(node.id);
-  };
 
   if (!hasChildren) {
     // Leaf node (pure file)
@@ -44,14 +37,9 @@ const TreeNode = ({ node, activeId, expandedFolders, toggleFolder }) => {
   return (
     <div style={{ paddingLeft: '8px', marginBottom: '2px' }}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div onClick={handleToggle} style={{ cursor: 'pointer', padding: '6px 4px', color: 'var(--text-secondary)' }}>
-           {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-        </div>
-        
         {hasContent ? (
           <Link 
             to={`/notebook/${node.id}`}
-            onClick={() => { if (!isExpanded) toggleFolder(node.id); }} // auto expand if not
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -68,46 +56,37 @@ const TreeNode = ({ node, activeId, expandedFolders, toggleFolder }) => {
             onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
             onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
           >
-            {isExpanded ? <FolderOpen size={16} style={{ color: 'var(--gold)' }} /> : <Folder size={16} style={{ color: 'var(--gold)' }} />}
+            <FolderOpen size={16} style={{ color: 'var(--gold)' }} />
             <span style={{ fontWeight: isActive ? '600' : '500' }}>{node.title}</span>
           </Link>
         ) : (
           <div 
-            onClick={handleToggle}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
               padding: '6px 8px',
-              cursor: 'pointer',
               color: 'var(--text-primary)',
               fontSize: '14px',
               flexGrow: 1,
-              borderRadius: '4px',
-              transition: 'background 0.2s'
+              borderRadius: '4px'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            {isExpanded ? <FolderOpen size={16} style={{ color: 'var(--gold)' }} /> : <Folder size={16} style={{ color: 'var(--gold)' }} />}
+            <FolderOpen size={16} style={{ color: 'var(--gold)' }} />
             <span style={{ fontWeight: '500' }}>{node.title}</span>
           </div>
         )}
       </div>
       
-      {isExpanded && (
-        <div style={{ borderLeft: '1px solid var(--border-dark)', marginLeft: '12px', paddingLeft: '8px', marginTop: '4px' }}>
-          {node.subsections.map((child, i) => (
-            <TreeNode 
-              key={i} 
-              node={child} 
-              activeId={activeId} 
-              expandedFolders={expandedFolders} 
-              toggleFolder={toggleFolder} 
-            />
-          ))}
-        </div>
-      )}
+      <div style={{ borderLeft: '1px solid var(--border-dark)', marginLeft: '12px', paddingLeft: '8px', marginTop: '4px' }}>
+        {node.subsections.map((child, i) => (
+          <TreeNode 
+            key={i} 
+            node={child} 
+            activeId={activeId} 
+          />
+        ))}
+      </div>
     </div>
   );
 };
@@ -115,7 +94,6 @@ const TreeNode = ({ node, activeId, expandedFolders, toggleFolder }) => {
 function Notebook() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [expandedFolders, setExpandedFolders] = useState(new Set());
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
@@ -124,14 +102,6 @@ function Notebook() {
       .then(res => res.json())
       .then(json => {
         setData(json);
-        const allFolderIds = new Set();
-        const findFolders = (node) => {
-          if (node.subsections && node.subsections.length > 0 && node.id) allFolderIds.add(node.id);
-          const children = node.subsections || node.sections || [];
-          children.forEach(findFolders);
-        };
-        if (json.sections) json.sections.forEach(findFolders);
-        setExpandedFolders(allFolderIds);
         setLoading(false);
       })
       .catch(err => {
@@ -144,15 +114,6 @@ function Notebook() {
   useEffect(() => {
     setSidebarOpen(false);
   }, [location.pathname]);
-
-  const toggleFolder = (id) => {
-    setExpandedFolders(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
 
   if (loading) {
     return <section className="page active" style={{ display: 'block', height: 'calc(100vh - 80px)' }}><div className="loader" style={{margin: '100px auto', display: 'block', textAlign: 'center'}}>Loading notebook...</div></section>;
@@ -295,8 +256,6 @@ function Notebook() {
               key={i} 
               node={section} 
               activeId={activeId} 
-              expandedFolders={expandedFolders} 
-              toggleFolder={toggleFolder} 
             />
           ))}
         </div>
