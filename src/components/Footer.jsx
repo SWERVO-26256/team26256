@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer>
       <div className="container footer-content">
-        <p>&copy; Copyright © Team 26256 Swervo</p>
+        <p>&copy; Copyright Team 26256 Swervo</p>
         <div className="footer-links">
           <a href="https://firstinspires.org" target="_blank" rel="noopener noreferrer">FIRST</a>
           <a href="https://github.com/SWERVO-26256" target="_blank" rel="noopener noreferrer">GitHub</a>
