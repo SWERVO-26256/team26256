@@ -991,6 +991,30 @@ footer {
   border: 2px solid var(--border-dark);
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-navy, #0b1220);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-dark, #1e293b);
+  border-radius: 10px;
+  border: 2px solid var(--bg-navy, #0b1220);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold, #ffd700);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-dark, #1e293b) var(--bg-navy, #0b1220);
+}
+
 @media (max-width: 768px) {
   .logo-hero-container {
     max-width: 250px;
