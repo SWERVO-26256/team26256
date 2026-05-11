@@ -1,89 +1,767 @@
 {
   "landing": {
-    "title": "Season 2026 Engineering Notebook",
-    "content": "Welcome to SWERVO 26256's engineering notebook. This year, our focus is on robust autonomous paths and reliable hardware. We began our journey by prototyping our [Drivetrain Code] to ensure smooth field navigation. At the same time, our hardware subteam started work on an [Active Intake System] to reliably acquire elements. We invite you to read through our iterations and learn about our engineering process.",
-    "links": {
-      "Drivetrain Code": "drivetrain-iteration-1",
-      "Active Intake System": "intake-prototyping-phase"
-    }
+    "title": "Season 2026-27 Engineering Notebook — SWERVO 26256",
+    "content": "Welcome to SWERVO 26256's engineering notebook. [How to add links: wrap any word in the content with square brackets like [this word] and then add it to the links object below pointing to the target entry id]",
+    "links": {}
   },
   "sections": [
     {
-      "id": "software",
-      "title": "Software",
-      "icon": "code",
-      "content": "Welcome to the Software directory. Here you will find all of our code iterations, control algorithms, and odometry mathematics.",
+      "id": "team",
+      "title": "Team",
+      "icon": "users",
+      "content": "",
       "subsections": [
         {
-          "id": "drivetrain-code",
-          "title": "Drivetrain Code",
-          "content": "This folder contains all iterations of our Mecanum drive subsystem code, from early prototyping to our final PID implementations.",
-          "subsections": [
-            {
-              "id": "drivetrain-iteration-1",
-              "title": "Iteration 1",
-              "date": "2026-09-18",
-              "author": "n/a",
-              "content": "Today we wrote the initial mecanum drive code using the [REV Control Hub] and tested encoder feedback. The primary goal was to ensure smooth strafing and consistent odometry tracking. We utilized a custom PID controller for rotational stability.",
-              "links": {
-                "REV Control Hub": "hardware-control-hub",
-                "encoder feedback": "software-encoders"
-              }
-            }
-          ]
+          "id": "team-mission",
+          "title": "Mission and Values",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
         },
         {
-          "id": "sensors",
-          "title": "Sensors & Logic",
-          "content": "Documentation regarding sensor integration, logic flows, and hardware-software communication protocols.",
-          "subsections": [
-            {
-              "id": "software-encoders",
-              "title": "Encoder Calibration",
-              "date": "2026-09-22",
-              "author": "n/a",
-              "content": "We implemented dead-wheel odometry to accurately track robot position regardless of wheel slip. Calibrating the track width took several attempts, but we finally achieved a precision of +/- 1cm over a full field translation.",
-              "links": {}
-            }
-          ]
+          "id": "team-story",
+          "title": "Our Story",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "team-season",
+          "title": "This Season",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "team-sustainability",
+          "title": "Sustainability Plan",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
         }
       ]
     },
     {
-      "id": "hardware",
-      "title": "Hardware",
-      "icon": "tool",
-      "content": "Welcome to the Hardware directory. Here you will find our physical iterations, CAD prototypes, and mechanical reasoning.",
+      "id": "game-analysis",
+      "title": "Game Analysis",
+      "icon": "target",
+      "content": "",
       "subsections": [
         {
-          "id": "intake",
-          "title": "Active Intake System",
-          "content": "Intake geometry research, material selection, and speed calculations.",
+          "id": "game-overview",
+          "title": "BIOBUZZ Overview",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "game-scoring",
+          "title": "Scoring Breakdown",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "game-strategy",
+          "title": "Our Strategy",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "game-autonomous-strategy",
+          "title": "Autonomous Strategy",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "game-alliance-strategy",
+          "title": "Alliance Strategy",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "mechanical",
+      "title": "Mechanical",
+      "icon": "tool",
+      "content": "",
+      "subsections": [
+        {
+          "id": "mechanical-constraints",
+          "title": "Design Constraints",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "drivetrain",
+          "title": "Drivetrain",
+          "content": "",
           "subsections": [
             {
-              "id": "intake-prototyping-phase",
-              "title": "Prototyping Phase",
-              "date": "2026-09-20",
-              "author": "n/a",
-              "content": "Initial tests with compliant wheels showed promise, but we encountered slipping when acquiring elements from off-angles. We adjusted the geometry to a 30-degree approach angle.",
+              "id": "drivetrain-why-mecanum",
+              "title": "Why Mecanum",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "drivetrain-specs",
+              "title": "Chassis Specs",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "drivetrain-testing",
+              "title": "Drivetrain Testing Log",
+              "date": "",
+              "author": "",
+              "content": "",
               "links": {}
             }
           ]
         },
         {
-          "id": "electronics",
-          "title": "Electronics",
-          "content": "Custom circuit boards, cable management, and power distribution diagrams.",
+          "id": "intake",
+          "title": "Intake",
+          "content": "",
           "subsections": [
             {
-              "id": "hardware-control-hub",
-              "title": "REV Control Hub Mounting",
-              "date": "2026-09-15",
-              "author": "n/a",
-              "content": "We securely mounted the REV Control Hub centrally to ensure the IMU is perfectly aligned with the robot's center of rotation. Wiring was routed cleanly to avoid entanglement with moving mechanisms.",
+              "id": "intake-concepts",
+              "title": "Design Concepts Considered",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "intake-final",
+              "title": "Final Design — Roller Intake",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "intake-iterations",
+              "title": "Intake Iteration Log",
+              "date": "",
+              "author": "",
+              "content": "",
               "links": {}
             }
           ]
+        },
+        {
+          "id": "outtake",
+          "title": "Outtake — Pan Tilt Delivery System",
+          "content": "",
+          "subsections": [
+            {
+              "id": "outtake-concepts",
+              "title": "Design Concepts Considered",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "outtake-final",
+              "title": "Final Design — Pan Tilt Tube",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "outtake-gate",
+              "title": "Gate Mechanism",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "outtake-iterations",
+              "title": "Outtake Iteration Log",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            }
+          ]
+        },
+        {
+          "id": "robot-v1",
+          "title": "Full Robot V1",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "robot-v1-failures",
+          "title": "V1 Failure Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "robot-v2",
+          "title": "Full Robot V2",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "software",
+      "title": "Software",
+      "icon": "code",
+      "content": "",
+      "subsections": [
+        {
+          "id": "software-environment",
+          "title": "Development Environment",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "software-architecture",
+          "title": "Code Architecture",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "drivetrain-code",
+          "title": "Drivetrain Code",
+          "content": "",
+          "subsections": [
+            {
+              "id": "drivetrain-math",
+              "title": "Mecanum Drive Math",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "drivetrain-iteration-1",
+              "title": "Iteration 1",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "drivetrain-iteration-2",
+              "title": "Iteration 2",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            }
+          ]
+        },
+        {
+          "id": "autonomous",
+          "title": "Autonomous",
+          "content": "",
+          "subsections": [
+            {
+              "id": "autonomous-strategy",
+              "title": "Autonomous Strategy",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "autonomous-routine-1",
+              "title": "Routine 1 — Basic Park",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "autonomous-routine-2",
+              "title": "Routine 2 — Scoring Run",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "autonomous-routine-3",
+              "title": "Routine 3 — Full Auto",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            }
+          ]
+        },
+        {
+          "id": "teleop",
+          "title": "TeleOp",
+          "content": "",
+          "subsections": [
+            {
+              "id": "teleop-controls",
+              "title": "Control Mapping",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "teleop-iterations",
+              "title": "Iteration Log",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            }
+          ]
+        },
+        {
+          "id": "vision",
+          "title": "Vision Processing",
+          "content": "",
+          "subsections": [
+            {
+              "id": "vision-apriltag",
+              "title": "AprilTag Pipeline",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "vision-targeting",
+              "title": "Target Locking",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "vision-iterations",
+              "title": "Iteration Log",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            }
+          ]
+        },
+        {
+          "id": "software-motor-config",
+          "title": "Motor and Servo Configuration",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "cad",
+      "title": "CAD and Design",
+      "icon": "pen-tool",
+      "content": "",
+      "subsections": [
+        {
+          "id": "cad-philosophy",
+          "title": "Design Philosophy",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "cad-tools",
+          "title": "Tools Used",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "cad-intake",
+          "title": "Intake CAD",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "cad-pantilt",
+          "title": "Pan Tilt System CAD",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "cad-full-robot",
+          "title": "Full Robot CAD",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "cad-printed-parts",
+          "title": "3D Printed Parts Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "electrical",
+      "title": "Electrical",
+      "icon": "zap",
+      "content": "",
+      "subsections": [
+        {
+          "id": "electrical-wiring",
+          "title": "Wiring Diagram",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "electrical-control-hub",
+          "title": "Control Hub Configuration",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "electrical-expansion-hub",
+          "title": "Expansion Hub Configuration",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "electrical-battery",
+          "title": "Battery Management",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "electrical-iterations",
+          "title": "Electrical Iteration Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "testing",
+      "title": "Testing",
+      "icon": "check-square",
+      "content": "",
+      "subsections": [
+        {
+          "id": "testing-philosophy",
+          "title": "Testing Philosophy",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "mechanism-tests",
+          "title": "Mechanism Tests",
+          "content": "",
+          "subsections": [
+            {
+              "id": "testing-intake",
+              "title": "Intake Test Log",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "testing-outtake",
+              "title": "Outtake Test Log",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            },
+            {
+              "id": "testing-pantilt-accuracy",
+              "title": "Pan Tilt Accuracy Log",
+              "date": "",
+              "author": "",
+              "content": "",
+              "links": {}
+            }
+          ]
+        },
+        {
+          "id": "testing-drive-practice",
+          "title": "Drive Practice Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "testing-match-simulation",
+          "title": "Match Simulation Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "testing-autonomous-reliability",
+          "title": "Autonomous Reliability Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "outreach",
+      "title": "Outreach",
+      "icon": "heart",
+      "content": "",
+      "subsections": [
+        {
+          "id": "outreach-philosophy",
+          "title": "Outreach Philosophy",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "outreach-events",
+          "title": "Event Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "outreach-school-showcase",
+          "title": "School Showcase — October 2026",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "outreach-impact",
+          "title": "Impact Summary",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "business",
+      "title": "Business",
+      "icon": "briefcase",
+      "content": "",
+      "subsections": [
+        {
+          "id": "business-budget",
+          "title": "Budget Overview",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "business-sponsors",
+          "title": "Sponsor Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "business-fundraising",
+          "title": "Fundraising Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "business-sponsor-package",
+          "title": "Sponsor Package",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "business-decisions",
+          "title": "Financial Decisions Log",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "meeting-log",
+      "title": "Meeting Log",
+      "icon": "calendar",
+      "content": "",
+      "subsections": [
+        {
+          "id": "meeting-sept-14",
+          "title": "Meeting 1 — September 14",
+          "date": "2026-09-14",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "meeting-sept-18",
+          "title": "Meeting 2 — September 18",
+          "date": "2026-09-18",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "competition-log",
+      "title": "Competition Log",
+      "icon": "award",
+      "content": "",
+      "subsections": [
+        {
+          "id": "competition-1",
+          "title": "Competition 1",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "competition-2",
+          "title": "Competition 2",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "reflections",
+      "title": "Reflections",
+      "icon": "book-open",
+      "content": "",
+      "subsections": [
+        {
+          "id": "reflections-weekly",
+          "title": "Weekly Reflections",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "reflections-post-competition",
+          "title": "Post Competition Reflections",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "reflections-season",
+          "title": "Season Reflection",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        }
+      ]
+    },
+    {
+      "id": "looking-forward",
+      "title": "Looking Forward",
+      "icon": "arrow-right",
+      "content": "",
+      "subsections": [
+        {
+          "id": "forward-recommendations",
+          "title": "Next Season Recommendations",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "forward-handoff",
+          "title": "Handoff Documentation",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
+        },
+        {
+          "id": "forward-open-source",
+          "title": "Open Source Commitment",
+          "date": "",
+          "author": "",
+          "content": "",
+          "links": {}
         }
       ]
     }
