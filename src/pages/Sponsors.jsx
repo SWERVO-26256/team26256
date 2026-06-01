@@ -66,7 +66,7 @@ function Sponsors() {
       <div className="cta-banner card">
         <h3>Support the next generation of engineers</h3>
         <p>Your sponsorship provides raw materials, registration fees, and educational resources crucial for our competitive season.</p>
-        <a href="/assets/docs/sponsorship-packet.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary">Download Sponsor Packet (.pdf)</a>
+        <a href="/assets/docs/sponsorship-package.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary">Download Sponsor Packet (.pdf)</a>
       </div>
     </section>
   );
