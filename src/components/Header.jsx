@@ -27,7 +27,7 @@ function Header() {
           <NavLink to="/gallery" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Gallery</NavLink>
           <NavLink to="/portfolio" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Portfolio</NavLink>
           <NavLink to="/robot" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Robot</NavLink>
-          {/* Team page hidden — re-add NavLink here when ready */}
+          <NavLink to="/team" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Team</NavLink>
           <NavLink to="/sponsors" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Sponsors</NavLink>
           <NavLink to="/stats" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Stats</NavLink>
           <NavLink to="/notebook" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Notebook</NavLink>
