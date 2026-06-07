@@ -43,7 +43,7 @@
   },
   {
     "name": "Jayden Li",
-    "title": "CAD Team",
+    "title": "Build Team",
     "grade": "12th",
     "image": "assets/team/jayden.jpg",
     "bio": "CAD/Software hybrid specialist engineering custom automated architectures and ensuring physical CAD geometry aligns with computer vision cameras."
@@ -70,7 +70,7 @@
     "bio": "Bridging physical and digital spaces with deep experience in hardware infrastructure, rapid prototyping, and lab component maintenance."
   },
   {
-    "name": "Rudra Panchal",
+    "name": "TBD",
     "title": "Software Team",
     "grade": "9th",
     "image": "assets/team/rudra.jpg",
@@ -84,22 +84,22 @@
     "bio": "Implementing core autonomous software features in Java while training as the secondary operator to step in on the sticks during matches."
   },
   {
-    "name": "Karim Abdelkareem",
+    "name": "TBD",
     "title": "Build Team",
     "grade": "12th",
     "image": "assets/team/karim.jpg",
     "bio": "Mechanical build specialist focused on rapid physical assembly, intake prototyping, and hardware execution pipelines."
   },
   {
-    "name": "Sophia Liang",
+    "name": "TBD",
     "title": "Build Team",
     "grade": "12th",
     "image": "assets/team/sophia.jpg",
     "bio": "Experienced builder dedicated to iterative learning, chassis assembly, tool management, and physical parts organization."
   },
   {
-    "name": "Atharv",
-    "title": "Build Team",
+    "name": "TBD",
+    "title": "Software Team",
     "grade": "11th",
     "image": "assets/team/atharv.jpg",
     "bio": "Mechanical build specialist responsible for physical assembly execution, field element maintenance, and raw material prep."
