@@ -13,8 +13,8 @@ function Team() {
     softwareMembers: []
   });
   const [loading, setLoading] = useState(true);
+  const [activeMobileTab, setActiveMobileTab] = useState('cad');
 
-  // Core colors + matching gradients for borders/badges
   const branding = {
     captain: { color: "#FFB020", gradient: "linear-gradient(135deg, #FFB020, #FF8000)" },
     business: { color: "#E040FB", gradient: "linear-gradient(135deg, #E040FB, #AA00FF)" },
@@ -102,7 +102,6 @@ function Team() {
 
   const renderMemberCard = (member, brand, isLead = false) => {
     if (!member) return null;
-    
     const displayLeadBadge = isLead && member.role !== "Captain" && member.role !== "Business Team";
 
     return (
@@ -110,7 +109,7 @@ function Team() {
         className="card team-card-hover" 
         style={{ 
           position: 'relative',
-          padding: '28px 16px 20px 16px',
+          padding: '24px 16px 16px 16px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -122,8 +121,8 @@ function Team() {
           background: 'linear-gradient(180deg, #1F1F1F 0%, #161616 100%)',
           borderRadius: '8px',
           width: '100%',
+          height: '100%',
           boxSizing: 'border-box',
-          flex: '1 1 auto', // Ensures columns stretch evenly
           justifyContent: 'center',
           transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, filter 0.25s ease'
         }}
@@ -148,12 +147,12 @@ function Team() {
         )}
 
         <div style={{ 
-          position: 'relative', width: '72px', height: '72px', borderRadius: '50%', 
+          position: 'relative', width: '64px', height: '64px', borderRadius: '50%', 
           backgroundColor: '#2A2A2A', border: `2px solid ${brand.color}`,
-          marginBottom: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+          marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
           boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
         }}>
-          <span style={{ fontWeight: 'bold', fontSize: '18px', color: '#FFFFFF' }}>
+          <span style={{ fontWeight: 'bold', fontSize: '16px', color: '#FFFFFF' }}>
             {getInitials(member.name)}
           </span>
           {member.img && (
@@ -165,154 +164,222 @@ function Team() {
             />
           )}
         </div>
-        <h4 style={{ margin: '0 0 6px 0', fontSize: '1.1rem', fontWeight: '600', color: '#FFFFFF', letterSpacing: '0.3px' }}>{member.name}</h4>
-        <p style={{ color: '#AAAAAA', fontSize: '0.8rem', margin: 0, fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        <h4 style={{ margin: '0 0 4px 0', fontSize: '1rem', fontWeight: '600', color: '#FFFFFF', letterSpacing: '0.3px' }}>{member.name}</h4>
+        <p style={{ color: '#AAAAAA', fontSize: '0.75rem', margin: 0, fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
           {member.role}
         </p>
       </div>
     );
   };
 
+  const buildCount = roster.buildLeads.length + roster.buildMembers.length;
+  const fullBuildMobileArray = [...roster.buildLeads, ...roster.buildMembers];
+
   if (loading) {
     return (
       <div style={{ padding: '80px 20px', textAlign: 'center', color: '#AAAAAA' }}>
-        <p>Loading structural robotics roster arrays...</p>
+        <p>Loading balanced tracking structures...</p>
       </div>
     );
   }
 
-  const fullBuildTeam = [...roster.buildLeads, ...roster.buildMembers];
-  const buildCount = fullBuildTeam.length;
-  
-  const halfCeil = Math.ceil(buildCount / 2);
-  const buildColumn1Items = fullBuildTeam.slice(0, halfCeil);
-  const buildColumn2Items = fullBuildTeam.slice(halfCeil);
-
-  // Inline styling utility for modern dynamic gradient pills
-  const renderPillBadge = (count, brand) => (
-    <span style={{
-      fontSize: '0.75rem',
-      fontWeight: '800', // Bumped font-weight slightly for extra crispness
-      padding: '2px 10px',
-      borderRadius: '20px',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-      background: brand.gradient, // The pill fill is now the pure, vibrant gradient
-      boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-      border: '1px solid rgba(255,255,255,0.1)'
-    }}>
-      <span style={{ color: '#000000' }}>
-        {count}
-      </span>
-    </span>
-  );
-
   return (
-    <section style={{ display: 'block', padding: '40px 0px', maxWidth: '1200px', margin: '0 auto', boxSizing: 'border-box', width: '100%' }}>
+    <section style={{ display: 'block', padding: '40px 16px', maxWidth: '1200px', margin: '0 auto', boxSizing: 'border-box', width: '100%' }}>
       
-      {/* Roster Main Header */}
-      <div style={{ 
-        marginBottom: '56px', 
-        width: '100%', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'flex-start', 
-        justifyContent: 'flex-start',
-        textAlign: 'left' 
-      }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '700', margin: '0 0 8px 0', color: '#FFFFFF' }}>
-          The Engineers
-        </h2>
-        <p style={{ color: '#AAAAAA', margin: 0, fontSize: '1rem', letterSpacing: '0.5px' }}>
-          SWERVO 26256 Roster
-        </p>
+      {/* Title block */}
+      <div style={{ marginBottom: '48px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '700', margin: '0 0 8px 0', color: '#FFFFFF' }}>The Engineers</h2>
+        <p style={{ color: '#AAAAAA', margin: 0, fontSize: '1rem', letterSpacing: '0.5px' }}>SWERVO 26256 Roster</p>
       </div>
 
-      {/* Row 1: Executive Management */}
-      <div style={{ marginBottom: '56px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <h3 style={{ width: '100%', textAlign: 'left', fontSize: '1.1rem', color: branding.captain.color, borderBottom: `1px solid rgba(255,176,32,0.2)`, paddingBottom: '8px', marginBottom: '20px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>
-          💼 Executive Administration
-        </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', width: '100%' }}>
+      {/* ========================================================== */}
+      {/* 1. DESKTOP/LAPTOP VERSION: ALIGNED DASHBOARD GENERATOR     */}
+      {/* ========================================================== */}
+      <div className="desktop-dashboard-container">
+        
+        {/* Row 1: Operations Management Strip (6 Columns across total width) */}
+        <div className="leads-horizontal-strip">
+          <div>{renderMemberCard(roster.captain, branding.captain, true)}</div>
+          <div>{renderMemberCard(roster.business, branding.business, true)}</div>
+          <div>{renderMemberCard(roster.cadLead, branding.cad, true)}</div>
+          <div>{renderMemberCard(roster.softwareLead, branding.software, true)}</div>
+          <div>{roster.buildLeads[0] && renderMemberCard(roster.buildLeads[0], branding.build, true)}</div>
+          <div>{roster.buildLeads[1] && renderMemberCard(roster.buildLeads[1], branding.build, true)}</div>
+        </div>
+
+        {/* Row 2 & Beyond: Unified 3x3 Matrix bound perfectly to matching endpoints */}
+        <div className="matrix-3x3-block">
+          {/* ROW 3 (Top Matrix Layer) */}
+          <div className="matrix-cell">{roster.buildMembers[0] && renderMemberCard(roster.buildMembers[0], branding.build)}</div>
+          <div className="matrix-cell">{roster.buildMembers[1] && renderMemberCard(roster.buildMembers[1], branding.build)}</div>
+          <div className="matrix-cell">{roster.cadMembers[0] && renderMemberCard(roster.cadMembers[0], branding.cad)}</div>
+
+          {/* ROW 2 (Middle Matrix Layer) */}
+          <div className="matrix-cell">{roster.buildMembers[2] && renderMemberCard(roster.buildMembers[2], branding.build)}</div>
+          <div className="matrix-cell">{roster.buildMembers[3] && renderMemberCard(roster.buildMembers[3], branding.build)}</div>
+          <div className="matrix-cell">{roster.cadMembers[1] && renderMemberCard(roster.cadMembers[1], branding.cad)}</div>
+
+          {/* ROW 1 (Bottom Matrix Layer) */}
+          <div className="matrix-cell">{roster.softwareMembers[0] && renderMemberCard(roster.softwareMembers[0], branding.software)}</div>
+          <div className="matrix-cell">{roster.softwareMembers[1] && renderMemberCard(roster.softwareMembers[1], branding.software)}</div>
+          <div className="matrix-cell">{roster.softwareMembers[2] && renderMemberCard(roster.softwareMembers[2], branding.software)}</div>
+        </div>
+
+      </div>
+
+      {/* ========================================================== */}
+      {/* 2. MOBILE RESPONSIVE LAYOUT (Kept Exactly As Requested)     */}
+      {/* ========================================================== */}
+      <div className="mobile-only-layout">
+        
+        {/* Fixed Core Administration Cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
           {renderMemberCard(roster.captain, branding.captain, true)}
           {renderMemberCard(roster.business, branding.business, true)}
           {roster.mentor && renderMemberCard(roster.mentor, branding.mentor, true)}
         </div>
-      </div>
 
-      {/* Master 4-Column Operations Grid */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(4, minmax(220px, 1fr))', 
-        gap: '24px',
-        alignItems: 'stretch', // Crucial: stretches nested items across row heights
-        width: '100%'
-      }}>
-        
-        {/* ================= HEADERS ROW LAYER ================= */}
-        
-        <div style={{ gridColumn: 'span 1' }}>
-          <h3 style={{ fontSize: '1.1rem', color: branding.cad.color, borderBottom: `1px solid rgba(0,229,255,0.25)`, paddingBottom: '8px', margin: '0 0 24px 0', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>📐 CAD Design</span>
-            {renderPillBadge(1 + roster.cadMembers.length, branding.cad)}
-          </h3>
+        {/* Segment Tabs Controller */}
+        <div className="mobile-tabs-container">
+          <button 
+            className={`tab-btn ${activeMobileTab === 'cad' ? 'active-cad' : ''}`}
+            onClick={() => setActiveMobileTab('cad')}
+          >
+            CAD ({1 + roster.cadMembers.length})
+          </button>
+          <button 
+            className={`tab-btn ${activeMobileTab === 'build' ? 'active-build' : ''}`}
+            onClick={() => setActiveMobileTab('build')}
+          >
+            Build ({buildCount})
+          </button>
+          <button 
+            className={`tab-btn ${activeMobileTab === 'software' ? 'active-software' : ''}`}
+            onClick={() => setActiveMobileTab('software')}
+          >
+            Code ({1 + roster.softwareMembers.length})
+          </button>
         </div>
 
-        <div style={{ gridColumn: 'span 2' }}>
-          <h3 style={{ fontSize: '1.1rem', color: branding.build.color, borderBottom: `1px solid rgba(255,61,0,0.25)`, paddingBottom: '8px', margin: '0 0 24px 0', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>🔧 Build Team</span>
-            {renderPillBadge(buildCount, branding.build)}
-          </h3>
-        </div>
-
-        <div style={{ gridColumn: 'span 1' }}>
-          <h3 style={{ fontSize: '1.1rem', color: branding.software.color, borderBottom: `1px solid rgba(0,255,102,0.25)`, paddingBottom: '8px', margin: '0 0 24px 0', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>💻 Programming</span>
-            {renderPillBadge(1 + roster.softwareMembers.length, branding.software)}
-          </h3>
-        </div>
-
-        {/* ================= DATA CARD COLUMNS ROW LAYER ================= */}
-
-        {/* Col 1: CAD */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {renderMemberCard(roster.cadLead, branding.cad, true)}
-          {roster.cadMembers.map((m, i) => <div style={{ display: 'flex', flex: '1 1 auto' }} key={i}>{renderMemberCard(m, branding.cad)}</div>)}
-        </div>
-
-        {/* Col 2: Build Segment A */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {buildColumn1Items.map((m, i) => (
-            <div style={{ display: 'flex', flex: '1 1 auto' }} key={i}>
-              {renderMemberCard(m, branding.build, m.role === "Build Co-Lead")}
+        {/* Responsive Content Pipeline */}
+        <div style={{ marginTop: '24px' }}>
+          {activeMobileTab === 'cad' && (
+            <div className="mobile-cards-stack">
+              {renderMemberCard(roster.cadLead, branding.cad, true)}
+              {roster.cadMembers.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, branding.cad)}</React.Fragment>)}
             </div>
-          ))}
-        </div>
+          )}
 
-        {/* Col 3: Build Segment B */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {buildColumn2Items.map((m, i) => (
-            <div style={{ display: 'flex', flex: '1 1 auto' }} key={i}>
-              {renderMemberCard(m, branding.build, m.role === "Build Co-Lead")}
+          {activeMobileTab === 'build' && (
+            <div className="mobile-cards-stack">
+              <div className="mobile-build-2x2">
+                {fullBuildMobileArray.map((m, i) => (
+                  <React.Fragment key={i}>
+                    {renderMemberCard(m, branding.build, m.role === "Build Co-Lead")}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
+          )}
 
-        {/* Col 4: Programming */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {renderMemberCard(roster.softwareLead, branding.software, true)}
-          {roster.softwareMembers.map((m, i) => <div style={{ display: 'flex', flex: '1 1 auto' }} key={i}>{renderMemberCard(m, branding.software)}</div>)}
+          {activeMobileTab === 'software' && (
+            <div className="mobile-cards-stack">
+              {renderMemberCard(roster.softwareLead, branding.software, true)}
+              {roster.softwareMembers.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, branding.software)}</React.Fragment>)}
+            </div>
+          )}
         </div>
 
       </div>
 
+      {/* Embedded Responsive Design Engine */}
       <style>{`
+        /* Desktop/Laptop UI Engine Styles */
+        .desktop-dashboard-container {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+          width: 100%;
+        }
+        .leads-horizontal-strip {
+          display: grid;
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          gap: 16px;
+          width: 100%;
+        }
+        .matrix-3x3-block {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 16px;
+          width: 100%;
+        }
+        .matrix-cell {
+          width: 100%;
+        }
+        .mobile-only-layout {
+          display: none;
+        }
         .team-card-hover:hover {
           transform: translateY(-5px);
           filter: brightness(1.12);
           box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+        }
+
+        /* Mobile Layout Selectors Layout Rules */
+        .mobile-tabs-container {
+          display: flex;
+          background-color: #1A1A1A;
+          padding: 4px;
+          border-radius: 8px;
+          border: 1px solid rgba(255,255,255,0.05);
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .tab-btn {
+          flex: 1;
+          background: transparent;
+          border: none;
+          color: #888888;
+          padding: 10px 0;
+          font-size: 0.85rem;
+          font-weight: 600;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .mobile-cards-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .mobile-build-2x2 {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+        }
+
+        /* Sync Mobile Theme Selected Tabs Colors */
+        .active-cad {
+          background-color: rgba(0, 229, 255, 0.1) !important;
+          color: #00E5FF !important;
+        }
+        .active-build {
+          background-color: rgba(255, 61, 0, 0.1) !important;
+          color: #FF3D00 !important;
+        }
+        .active-software {
+          background-color: rgba(0, 255, 102, 0.1) !important;
+          color: #00FF66 !important;
+        }
+
+        /* Layout Media Breakpoint Switcher */
+        @media (max-width: 950px) {
+          .desktop-dashboard-container {
+            display: none;
+          }
+          .mobile-only-layout {
+            display: block;
+          }
         }
       `}</style>
 
