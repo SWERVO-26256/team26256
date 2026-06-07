@@ -17,71 +17,64 @@ function Team() {
     fetch('/team-members.json')
       .then((res) => res.json())
       .then((data) => {
-        // Process roles, assignments, images, and short descriptions based on names
+        // Process names and map directly to clean subteams and roles
         const processedMembers = data.map(member => {
           let role = "Member";
-          let subteam = "🔧 Mechanical Build & Hardware"; 
-          let desc = member.bio || "";
+          let subteam = "🔧 Mechanical Build & Hardware"; // Default fallback
 
           const nameLower = member.name.toLowerCase();
           const titleLower = (member.title || "").toLowerCase();
 
-          // Captain Rules
+          // Operations & Business Leadership Rules
           if (nameLower.includes("heth") || titleLower.includes("captain")) {
             subteam = "Leadership & Operations";
             role = "Team Captain";
-            desc = "Executive Director & Oversight.";
+          } else if (nameLower.includes("allison") || titleLower.includes("business") || titleLower.includes("media")) {
+            subteam = "Leadership & Operations";
+            role = "Business & Media Lead";
           }
           // CAD Subteam Rules
           else if (nameLower.includes("braydon")) {
             subteam = "📐 CAD Design";
             role = "CAD Subteam Lead";
-            desc = "Lead CAD Designer.";
           } else if (["muhammad", "mark", "jayden"].some(n => nameLower.includes(n))) {
             subteam = "📐 CAD Design";
             role = "CAD Specialist";
-            desc = nameLower.includes("muhammad") ? "Mechanism Designer." : nameLower.includes("mark") ? "Systems Integration." : "Vision & Geometry.";
           }
           // Build Subteam Rules
           else if (nameLower.includes("kyran") || nameLower.includes("michael")) {
             subteam = "🔧 Mechanical Build & Hardware";
             role = "Co-Build Lead";
-            desc = nameLower.includes("kyran") ? "Manufacturing & Assembly." : "Mechanical Assembly.";
           } else if (nameLower.includes("kacper")) {
             subteam = "🔧 Mechanical Build & Hardware";
             role = "Driver & Build";
-            desc = "Main Robot Driver & Hardware Assembly.";
           } else if (nameLower.includes("prospect 1") || nameLower.includes("prospect 2") || nameLower.includes("prospect 3")) {
             subteam = "🔧 Mechanical Build & Hardware";
             role = "Build";
-            desc = "Junior Hardware Fabricator.";
           }
           // Programming Subteam Rules
           else if (nameLower.includes("rugved") || titleLower.includes("software architecture")) {
             subteam = "💻 Autonomous Software";
             role = "Software Subteam Lead";
-            desc = "Software Architecture Lead.";
           } else if (["aaron", "sophia", "prospect 4"].some(n => nameLower.includes(n)) || titleLower.includes("software") || titleLower.includes("programmer")) {
             subteam = "💻 Autonomous Software";
             role = "Programmer";
-            desc = nameLower.includes("aaron") ? "Java Developer & Backup Driver." : nameLower.includes("sophia") ? "Control & TeleOp Programmer." : "Autonomous Systems Specialist.";
           }
 
           return {
             name: member.name,
             role: role,
             subteam: subteam,
-            desc: desc,
             img: member.image ? `/${member.image.replace(/^\//, '')}` : ""
           };
         });
 
-        // Split the dataset: Pull all Leads, Co-Leads, and Captains to the top row
+        // Split data: Extract all Leads, Co-Leads, Captains, and Business members to the top row
         const leadList = processedMembers.filter(m => 
-          m.role.includes("Lead") || m.role.includes("Captain") || m.subteam === "Leadership"
+          m.role.includes("Lead") || m.role.includes("Captain") || m.subteam === "Leadership & Operations"
         );
 
-        // Put remaining engineers into their respective technical columns
+        // Put remaining engineers into their respective technical rows/columns below
         const techSubteamsOrder = ["📐 CAD Design", "🔧 Mechanical Build & Hardware", "💻 Autonomous Software"];
         const techGroups = techSubteamsOrder.map(subteamName => ({
           subteam: subteamName,
@@ -120,7 +113,7 @@ function Team() {
     );
   }
 
-  // Reusable card renderer to keep the UI clean and dry
+  // Streamlined card renderer focusing entirely on Name, Title, and Profile Avatar/Initials
   const renderMemberCard = (member, accentColor) => (
     <div 
       className="card" 
@@ -152,22 +145,19 @@ function Team() {
       </div>
 
       <div style={{ width: '100%' }}>
-        <h4 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', fontWeight: '600' }}>{member.name}</h4>
+        <h4 style={{ margin: '0 0 6px 0', fontSize: '1.2rem', fontWeight: '600' }}>{member.name}</h4>
         
         {(member.role.includes('Lead') || member.role.includes('Captain')) && (
           <span style={{ 
             fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.8px', 
-            color: accentColor, fontWeight: 'bold', display: 'block', marginBottom: '6px' 
+            color: accentColor, fontWeight: 'bold', display: 'block', marginBottom: '8px' 
           }}>
             ★ LEADERSHIP
           </span>
         )}
         
-        <p style={{ color: 'var(--text-main)', fontSize: '0.85rem', fontWeight: '600', margin: '0 0 8px 0', opacity: 0.95 }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: '500', margin: 0 }}>
           {member.role}
-        </p>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: '1.4', margin: 0 }}>
-          {member.desc}
         </p>
       </div>
     </div>
@@ -182,7 +172,7 @@ function Team() {
         </p>
       </div>
 
-      {/* Row 1: Absolute Leadership Row (Captain, CAD Lead, Build Co-Leads, Software Lead side-by-side) */}
+      {/* Row 1: Absolute Leadership Row (Captain, Business Lead, and Subteam Leads side-by-side) */}
       <div style={{ marginBottom: '56px' }}>
         <h3 style={{ 
           fontSize: '1.4rem', color: subteamColors["Leadership & Operations"],
@@ -192,7 +182,7 @@ function Team() {
           💼 Leadership & Operations
         </h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '20px' }}>
-          {leadership.map((member) => renderMemberCard(member, subteamColors[member.subteam] || subteamColors["Leadership & Operations"]))}
+          {leadership.map((member, idx) => renderMemberCard(member, subteamColors[member.subteam] || subteamColors["Leadership & Operations"]))}
         </div>
       </div>
 
@@ -208,7 +198,7 @@ function Team() {
           </h3>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
-            {group.members.map((member) => renderMemberCard(member, group.color))}
+            {group.members.map((member, idx) => renderMemberCard(member, group.color))}
           </div>
         </div>
       ))}
