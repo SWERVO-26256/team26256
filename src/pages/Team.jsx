@@ -4,6 +4,7 @@ function Team() {
   const [roster, setRoster] = useState({
     captain: null,
     business: null,
+    mentor: null,
     cadLead: null,
     cadMembers: [],
     buildLead1: null,
@@ -15,9 +16,11 @@ function Team() {
   });
   const [loading, setLoading] = useState(true);
 
+  // Exact 6-color palette mapping for all executive roles and subteams
   const colors = {
     captain: "#FFB020",      // Amber Gold
-    business: "#E040FB",     // Neon Orchid/Purple
+    business: "#E040FB",     // Neon Purple
+    mentor: "#00E676",       // Vibrant Mint Green
     cad: "#00E5FF",          // Cyan Ice
     build: "#FF3D00",        // Red-Orange
     software: "#00FF66"      // Bright Green
@@ -29,6 +32,7 @@ function Team() {
       .then((data) => {
         let captain = null;
         let business = null;
+        let mentor = null;
         let cadLead = null;
         const cadMembers = [];
         
@@ -48,42 +52,44 @@ function Team() {
             role: member.role || member.title || "Team Member"
           };
 
-          // Executive Classifications
+          // 1. Executive Board Classifications (Heth, Allison, Mentors)
           if (nameLower.includes("heth") || roleLower.includes("captain")) {
             captain = { ...memberData, role: "Team Captain" };
           } else if (nameLower.includes("allison") || roleLower.includes("business")) {
             business = { ...memberData, role: "Business & Media Lead" };
+          } else if (roleLower.includes("mentor") || roleLower.includes("advisor")) {
+            mentor = { ...memberData, role: "Team Advisor / Mentor" };
           }
           
-          // CAD Subteam
+          // 2. CAD Subteam
           else if (roleLower.includes("cad")) {
             if (roleLower.endsWith("lead")) cadLead = memberData;
             else cadMembers.push(memberData);
           }
           
-          // Build Subteam
+          // 3. Build Subteam
           else if (roleLower.includes("build") || roleLower.includes("driver")) {
             if (roleLower.endsWith("lead")) buildLeads.push(memberData);
             else buildMembersRaw.push(memberData);
           }
           
-          // Software Subteam
+          // 4. Software Subteam
           else if (roleLower.includes("software") || roleLower.includes("program")) {
             if (roleLower.endsWith("lead")) softwareLead = memberData;
             else softwareMembers.push(memberData);
           }
         });
 
-        // Separate build leads
+        // Isolate Co-Build Leads
         const buildLead1 = buildLeads[0] || null;
         const buildLead2 = buildLeads[1] || null;
 
-        // Hardcoded Split: First 4 members go to Alpha, remaining 2 go to Beta
+        // Forceful Array Splitting: Slice exactly 4 to Alpha, and everything else to Beta
         const buildMembers1 = buildMembersRaw.slice(0, 4);
-        const buildMembers2 = buildMembersRaw.slice(4, 6);
+        const buildMembers2 = buildMembersRaw.slice(4);
 
         setRoster({
-          captain, business, cadLead, cadMembers,
+          captain, business, mentor, cadLead, cadMembers,
           buildLead1, buildLead2, buildMembers1, buildMembers2,
           softwareLead, softwareMembers
         });
@@ -112,21 +118,23 @@ function Team() {
       <div 
         className="card" 
         style={{ 
-          padding: '16px',
+          padding: '20px 16px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           textAlign: 'center',
           borderTop: `4px solid ${color}`,
-          minWidth: '180px'
+          flexGrow: 1,
+          flexShrink: 1,
+          width: '100%' // Fluid sizing within the CSS grid tracks
         }}
       >
         <div style={{ 
-          position: 'relative', width: '65px', height: '65px', borderRadius: '50%', 
+          position: 'relative', width: '70px', height: '70px', borderRadius: '50%', 
           backgroundColor: '#2A2A2A', border: `2px solid ${color}`,
-          marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
+          marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
         }}>
-          <span style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--text-main)' }}>
+          <span style={{ fontWeight: 'bold', fontSize: '18px', color: 'var(--text-main)' }}>
             {getInitials(member.name)}
           </span>
           {member.img && (
@@ -138,32 +146,31 @@ function Team() {
             />
           )}
         </div>
-        <h4 style={{ margin: '0 0 2px 0', fontSize: '1rem', fontWeight: '600' }}>{member.name}</h4>
+        <h4 style={{ margin: '0 0 4px 0', fontSize: '1.1rem', fontWeight: '600' }}>{member.name}</h4>
         {isLead && (
-          <span style={{ fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: color, fontWeight: 'bold', display: 'block', marginBottom: '2px' }}>
+          <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: color, fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
             ★ LEAD
           </span>
         )}
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', margin: 0 }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0 }}>
           {member.role}
         </p>
       </div>
     );
   };
 
-  // Layout wrapper to format row headers and horizontal flex cards cleanly
+  // Grid row wrapper mapping cards dynamically based on screen real estate
   const renderHorizontalRow = (title, color, leadComponent, membersArray = []) => {
     return (
-      <div style={{ marginBottom: '40px' }}>
-        <h3 style={{ fontSize: '1.2rem', color: color, borderBottom: `2px solid ${color}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600' }}>
+      <div style={{ marginBottom: '44px' }}>
+        <h3 style={{ fontSize: '1.25rem', color: color, borderBottom: `2px solid ${color}`, paddingBottom: '6px', marginBottom: '20px', fontWeight: '600' }}>
           {title}
         </h3>
         <div style={{ 
-          display: 'flex', 
-          gap: '16px', 
-          overflowX: 'auto', 
-          paddingBottom: '8px',
-          flexWrap: 'wrap' // Allows clean wrapping on mobile devices
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          gap: '16px',
+          alignItems: 'start'
         }}>
           {leadComponent}
           {membersArray.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, color)}</React.Fragment>)}
@@ -175,7 +182,7 @@ function Team() {
   if (loading) {
     return (
       <section className="page" style={{ display: 'block', padding: '40px', textAlign: 'center' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Arranging structural matrices...</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Compiling framework structures...</p>
       </section>
     );
   }
@@ -189,27 +196,32 @@ function Team() {
         </p>
       </div>
 
-      {/* Row 1: Executive Board (Captain & Business Side-by-Side Equaled) */}
-      <div style={{ marginBottom: '48px' }}>
-        <h3 style={{ fontSize: '1.2rem', color: colors.captain, borderBottom: `2px solid ${colors.captain}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600', textTransform: 'uppercase' }}>
-          💼 Executive Board
+      {/* Row 1: Executive Leadership Row (Captain, Business Lead, and Mentor side-by-side) */}
+      <div style={{ marginBottom: '44px' }}>
+        <h3 style={{ fontSize: '1.25rem', color: colors.captain, borderBottom: `2px solid ${colors.captain}`, paddingBottom: '6px', marginBottom: '20px', fontWeight: '600', textTransform: 'uppercase' }}>
+          💼 Executive Administration
         </h3>
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+          gap: '16px' 
+        }}>
           {renderMemberCard(roster.captain, colors.captain, true)}
           {renderMemberCard(roster.business, colors.business, true)}
+          {roster.mentor && renderMemberCard(roster.mentor, colors.mentor, true)}
         </div>
       </div>
 
       {/* Row 2: CAD Design */}
       {renderHorizontalRow("📐 CAD Design", colors.cad, renderMemberCard(roster.cadLead, colors.cad, true), roster.cadMembers)}
 
-      {/* Row 3: Build Team Alpha */}
+      {/* Row 3: Build Team Alpha (Kyran) */}
       {renderHorizontalRow("🔧 Build Team Alpha", colors.build, renderMemberCard(roster.buildLead1, colors.build, true), roster.buildMembers1)}
 
-      {/* Row 4: Build Team Beta */}
+      {/* Row 4: Build Team Beta (Michael) */}
       {renderHorizontalRow("🔧 Build Team Beta", colors.build, renderMemberCard(roster.buildLead2, colors.build, true), roster.buildMembers2)}
 
-      {/* Row 5: Autonomous Software */}
+      {/* Row 5: Autonomous Programming */}
       {renderHorizontalRow("💻 Programming", colors.software, renderMemberCard(roster.softwareLead, colors.software, true), roster.softwareMembers)}
 
     </section>
