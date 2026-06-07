@@ -15,7 +15,6 @@ function Team() {
   });
   const [loading, setLoading] = useState(true);
 
-  // Exact 5-color palette mapping for all 5 distinct columns/roles
   const colors = {
     captain: "#FFB020",      // Amber Gold
     business: "#E040FB",     // Neon Orchid/Purple
@@ -32,58 +31,71 @@ function Team() {
         let business = null;
         let cadLead = null;
         const cadMembers = [];
-        let buildLead1 = null;
-        let buildLead2 = null;
+        
+        const buildLeads = [];
         const buildMembersRaw = [];
+        
         let softwareLead = null;
         const softwareMembers = [];
 
-        // Parse and classify every single member strictly into their structural slot
         data.forEach(member => {
           const nameLower = member.name.toLowerCase();
-          const titleLower = (member.title || "").toLowerCase();
-          
+          const roleLower = (member.role || member.title || "").toLowerCase().trim();
+
           const memberData = {
             name: member.name,
-            img: member.image ? `/${member.image.replace(/^\//, '')}` : ""
+            img: member.image ? `/${member.image.replace(/^\//, '')}` : "",
+            role: member.role || member.title || "Team Member"
           };
 
-          // 1. Executive Board Classification
-          if (nameLower.includes("heth") || titleLower.includes("captain")) {
+          // 1. Executive Exceptions (Heth & Allison)
+          if (nameLower.includes("heth") || roleLower.includes("captain")) {
             captain = { ...memberData, role: "Team Captain" };
-          } else if (nameLower.includes("allison") || titleLower.includes("business") || titleLower.includes("media")) {
+          } else if (nameLower.includes("allison") || roleLower.includes("business")) {
             business = { ...memberData, role: "Business & Media Lead" };
           }
-          // 2. CAD Column Classification
-          else if (nameLower.includes("braydon")) {
-            cadLead = { ...memberData, role: "CAD Subteam Lead" };
-          } else if (["muhammad", "mark", "jayden"].some(n => nameLower.includes(n))) {
-            cadMembers.push({ ...memberData, role: "CAD Specialist" });
+          
+          // 2. CAD Subteam Sorting
+          else if (roleLower.includes("cad")) {
+            if (roleLower.endsWith("lead")) {
+              cadLead = memberData;
+            } else {
+              cadMembers.push(memberData);
+            }
           }
-          // 3. Build Columns Classification (Handles Dual Leads)
-          else if (nameLower.includes("kyran")) {
-            buildLead1 = { ...memberData, role: "Co-Build Lead" };
-          } else if (nameLower.includes("michael")) {
-            buildLead2 = { ...memberData, role: "Co-Build Lead" };
-          } else if (nameLower.includes("kacper")) {
-            buildMembersRaw.push({ ...memberData, role: "Driver & Build" });
-          } else if (["prospect 1", "prospect 2", "prospect 3"].some(n => nameLower.includes(n))) {
-            buildMembersRaw.push({ ...memberData, role: "Build" });
+          
+          // 3. Build Subteam Sorting
+          else if (roleLower.includes("build") || roleLower.includes("driver")) {
+            if (roleLower.endsWith("lead")) {
+              buildLeads.push(memberData);
+            } else {
+              buildMembersRaw.push(memberData);
+            }
           }
-          // 4. Software Column Classification
-          else if (nameLower.includes("rugved") || titleLower.includes("software architecture")) {
-            softwareLead = { ...memberData, role: "Software Subteam Lead" };
-          } else if (["aaron", "sophia", "prospect 4"].some(n => nameLower.includes(n)) || titleLower.includes("software") || titleLower.includes("programmer")) {
-            softwareMembers.push({ ...memberData, role: "Programmer" });
+          
+          // 4. Software / Programming Subteam Sorting
+          else if (roleLower.includes("software") || roleLower.includes("program")) {
+            if (roleLower.endsWith("lead")) {
+              softwareLead = memberData;
+            } else {
+              softwareMembers.push(memberData);
+            }
           }
         });
 
-        // Split the remaining Build members perfectly across the 2 Co-Lead columns
+        // Dynamic allocation for Dual Build Leads
+        const buildLead1 = buildLeads[0] || null;
+        const buildLead2 = buildLeads[1] || null;
+
+        // Balance the Build members list evenly into Alpha and Beta columns
         const buildMembers1 = [];
         const buildMembers2 = [];
         buildMembersRaw.forEach((m, idx) => {
-          if (idx % 2 === 0) buildMembers1.push(m);
-          else buildMembers2.push(m);
+          if (idx % 2 === 0) {
+            buildMembers1.push(m);
+          } else {
+            buildMembers2.push(m);
+          }
         });
 
         setRoster({
@@ -94,7 +106,7 @@ function Team() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Error building custom roster alignment:", err);
+        console.error("Error dynamically sorting roster roles:", err);
         setLoading(false);
       });
   }, []);
@@ -110,15 +122,6 @@ function Team() {
     e.target.style.display = 'none';
   };
 
-  if (loading) {
-    return (
-      <section className="page" style={{ display: 'block', padding: '40px', textAlign: 'center' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Compiling grid matrices...</p>
-      </section>
-    );
-  }
-
-  // Reusable card renderer
   const renderMemberCard = (member, color, isLead = false) => {
     if (!member) return null;
     return (
@@ -164,16 +167,24 @@ function Team() {
     );
   };
 
+  if (loading) {
+    return (
+      <section className="page" style={{ display: 'block', padding: '40px', textAlign: 'center' }}>
+        <p style={{ color: 'var(--text-secondary)' }}>Parsing roster matrices...</p>
+      </section>
+    );
+  }
+
   return (
     <section className="page fade-in" style={{ display: 'block', padding: '20px 16px', maxWidth: '1200px', margin: '0 auto' }}>
       <div className="page-header" style={{ marginBottom: '48px', textAlign: 'center' }}>
         <h2 style={{ fontSize: '2.5rem', marginBottom: '12px' }}>The Engineers</h2>
         <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-          SWERVO 26256 Roster Layout
+          SWERVO 26256 Direct Roster
         </p>
       </div>
 
-      {/* Row 1: Executive Board (Captain & Business Side-by-Side Equaled) */}
+      {/* Row 1: Executive Board */}
       <div style={{ 
         display: 'grid', 
         gridTemplateColumns: 'repeat(2, 1fr)', 
@@ -203,28 +214,28 @@ function Team() {
         <div>
           <h3 style={{ fontSize: '1.1rem', color: colors.cad, borderBottom: `2px solid ${colors.cad}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600' }}>📐 CAD Design</h3>
           {renderMemberCard(roster.cadLead, colors.cad, true)}
-          {roster.cadMembers.map(m => renderMemberCard(m, colors.cad))}
+          {roster.cadMembers.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, colors.cad)}</React.Fragment>)}
         </div>
 
-        {/* Column 2: MECHANICAL BUILD A (Kyran Side) */}
+        {/* Column 2: MECHANICAL BUILD A */}
         <div>
           <h3 style={{ fontSize: '1.1rem', color: colors.build, borderBottom: `2px solid ${colors.build}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600' }}>🔧 Build Team Alpha</h3>
           {renderMemberCard(roster.buildLead1, colors.build, true)}
-          {roster.buildMembers1.map(m => renderMemberCard(m, colors.build))}
+          {roster.buildMembers1.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, colors.build)}</React.Fragment>)}
         </div>
 
-        {/* Column 3: MECHANICAL BUILD B (Michael Side) */}
+        {/* Column 3: MECHANICAL BUILD B */}
         <div>
           <h3 style={{ fontSize: '1.1rem', color: colors.build, borderBottom: `2px solid ${colors.build}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600' }}>🔧 Build Team Beta</h3>
           {renderMemberCard(roster.buildLead2, colors.build, true)}
-          {roster.buildMembers2.map(m => renderMemberCard(m, colors.build))}
+          {roster.buildMembers2.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, colors.build)}</React.Fragment>)}
         </div>
 
         {/* Column 4: AUTONOMOUS SOFTWARE */}
         <div>
           <h3 style={{ fontSize: '1.1rem', color: colors.software, borderBottom: `2px solid ${colors.software}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600' }}>💻 Programming</h3>
           {renderMemberCard(roster.softwareLead, colors.software, true)}
-          {roster.softwareMembers.map(m => renderMemberCard(m, colors.software))}
+          {roster.softwareMembers.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, colors.software)}</React.Fragment>)}
         </div>
 
       </div>
