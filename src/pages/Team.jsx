@@ -7,23 +7,20 @@ function Team() {
     mentor: null,
     cadLead: null,
     cadMembers: [],
-    buildLead1: null,
-    buildLead2: null,
-    buildMembers1: [],
-    buildMembers2: [],
+    buildLeads: [],
+    buildMembers: [],
     softwareLead: null,
     softwareMembers: []
   });
   const [loading, setLoading] = useState(true);
 
-  // 6-color system mapping your exact requested visuals
   const colors = {
-    captain: "#FFB020",      // Amber Gold
-    business: "#E040FB",     // Neon Purple
-    mentor: "#00E676",       // Vibrant Mint Green
-    cad: "#00E5FF",          // Cyan Ice
-    build: "#FF3D00",        // Red-Orange
-    software: "#00FF66"      // Bright Green
+    captain: "#FFB020",      
+    business: "#E040FB",     
+    mentor: "#00E676",       
+    cad: "#00E5FF",          
+    build: "#FF3D00",        
+    software: "#00FF66"      
   };
 
   useEffect(() => {
@@ -35,13 +32,8 @@ function Team() {
         let mentor = null;
         let cadLead = null;
         const cadMembers = [];
-        
-        let buildLead1 = null;
-        let buildLead2 = null;
-        // Temporary arrays to hold standard build members for a clean split
-        const alphaBuildMembers = [];
-        const betaBuildMembers = [];
-        
+        const buildLeads = [];
+        const buildMembers = [];
         let softwareLead = null;
         const softwareMembers = [];
 
@@ -55,60 +47,46 @@ function Team() {
             role: member.title || "Team Member"
           };
 
-          // 1. Executive Administration Row (Strict Name Matching from your JSON)
+          // Executive Administration Row
           if (nameLower.includes("heth")) {
-            captain = { ...memberData, role: "Team Captain" };
+            captain = { ...memberData, role: "Captain" };
           } else if (nameLower.includes("allison")) {
-            business = { ...memberData, role: "Business Team Lead" };
+            business = { ...memberData, role: "Business Team" };
           } else if (titleLower.includes("mentor") || titleLower.includes("advisor")) {
             mentor = { ...memberData, role: "Team Mentor" };
           }
           
-          // 2. CAD Row
+          // CAD Row
           else if (titleLower.includes("cad")) {
-            if (titleLower.includes("lead")) {
-              cadLead = memberData;
-            } else {
-              cadMembers.push(memberData);
-            }
+            if (titleLower.includes("lead")) cadLead = memberData;
+            else cadMembers.push(memberData);
           }
           
-          // 3. Software Row
+          // Software Row
           else if (titleLower.includes("software")) {
-            if (titleLower.includes("lead")) {
-              softwareLead = memberData;
-            } else {
-              softwareMembers.push(memberData);
-            }
+            if (titleLower.includes("lead")) softwareLead = memberData;
+            else softwareMembers.push(memberData);
           }
 
-          // 4. Build Split Logic (Kyran vs Michael Leads & Custom Split)
+          // Build Row
           else if (titleLower.includes("build")) {
-            if (nameLower.includes("kyran")) {
-              buildLead1 = { ...memberData, role: "Build Team Lead (Alpha)" };
-            } else if (nameLower.includes("michael")) {
-              buildLead2 = { ...memberData, role: "Build Team Lead (Beta)" };
-            } 
-            // Manual clean split across the 4 standard builders found in your JSON
-            else if (nameLower.includes("karim") || nameLower.includes("sophia")) {
-              alphaBuildMembers.push(memberData);
-            } else if (nameLower.includes("kacper") || nameLower.includes("atharv")) {
-              betaBuildMembers.push(memberData);
+            if (titleLower.includes("lead")) {
+              buildLeads.push({ ...memberData, role: "Co-Build Lead" });
+            } else {
+              buildMembers.push(memberData);
             }
           }
         });
 
         setRoster({
           captain, business, mentor, cadLead, cadMembers,
-          buildLead1, buildLead2, 
-          buildMembers1: alphaBuildMembers, 
-          buildMembers2: betaBuildMembers,
+          buildLeads, buildMembers,
           softwareLead, softwareMembers
         });
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Error formatting horizontal rows:", err);
+        console.error("Error formatting roster configuration:", err);
         setLoading(false);
       });
   }, []);
@@ -124,14 +102,17 @@ function Team() {
     e.target.style.display = 'none';
   };
 
-  // Completely responsive card rendering
   const renderMemberCard = (member, color, isLead = false) => {
     if (!member) return null;
+    
+    // Explicitly hide the lead badge for Captain and Business cards
+    const displayLeadBadge = isLead && member.role !== "Captain" && member.role !== "Business Team";
+
     return (
       <div 
         className="card" 
         style={{ 
-          padding: '20px 16px',
+          padding: '16px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -141,11 +122,11 @@ function Team() {
         }}
       >
         <div style={{ 
-          position: 'relative', width: '70px', height: '70px', borderRadius: '50%', 
+          position: 'relative', width: '65px', height: '65px', borderRadius: '50%', 
           backgroundColor: '#2A2A2A', border: `2px solid ${color}`,
-          marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
+          marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
         }}>
-          <span style={{ fontWeight: 'bold', fontSize: '18px', color: 'var(--text-main)' }}>
+          <span style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--text-main)' }}>
             {getInitials(member.name)}
           </span>
           {member.img && (
@@ -157,37 +138,15 @@ function Team() {
             />
           )}
         </div>
-        <h4 style={{ margin: '0 0 4px 0', fontSize: '1.1rem', fontWeight: '600' }}>{member.name}</h4>
-        {isLead && (
-          <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: color, fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
+        <h4 style={{ margin: '0 0 2px 0', fontSize: '1rem', fontWeight: '600' }}>{member.name}</h4>
+        {displayLeadBadge && (
+          <span style={{ fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: color, fontWeight: 'bold', display: 'block', marginBottom: '2px' }}>
             ★ LEAD
           </span>
         )}
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0 }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', margin: 0 }}>
           {member.role}
         </p>
-      </div>
-    );
-  };
-
-  // Layout wrapper to format row headers and dynamic CSS columns perfectly
-  const renderHorizontalRow = (title, color, leadComponent, membersArray = []) => {
-    return (
-      <div style={{ marginBottom: '44px' }}>
-        <h3 style={{ fontSize: '1.25rem', color: color, borderBottom: `2px solid ${color}`, paddingBottom: '6px', marginBottom: '20px', fontWeight: '600' }}>
-          {title}
-        </h3>
-        <div style={{ 
-          display: 'grid', 
-          // repeat(auto-fit) stretches the cards out dynamically to completely fill desktop space, 
-          // minmax(180px) forces clean responsive collapsing on small mobile screen viewports
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
-          gap: '16px',
-          alignItems: 'start'
-        }}>
-          {leadComponent}
-          {membersArray.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, color)}</React.Fragment>)}
-        </div>
       </div>
     );
   };
@@ -195,7 +154,7 @@ function Team() {
   if (loading) {
     return (
       <section className="page" style={{ display: 'block', padding: '40px', textAlign: 'center' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Compiling framework structures...</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Finalizing clean interface matrices...</p>
       </section>
     );
   }
@@ -209,16 +168,12 @@ function Team() {
         </p>
       </div>
 
-      {/* Row 1: Executive Board (Captain, Business Lead, and Mentor side-by-side expanding) */}
+      {/* Row 1: Executive Board */}
       <div style={{ marginBottom: '44px' }}>
         <h3 style={{ fontSize: '1.25rem', color: colors.captain, borderBottom: `2px solid ${colors.captain}`, paddingBottom: '6px', marginBottom: '20px', fontWeight: '600', textTransform: 'uppercase' }}>
           💼 Executive Administration
         </h3>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-          gap: '16px' 
-        }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
           {renderMemberCard(roster.captain, colors.captain, true)}
           {renderMemberCard(roster.business, colors.business, true)}
           {roster.mentor && renderMemberCard(roster.mentor, colors.mentor, true)}
@@ -226,16 +181,54 @@ function Team() {
       </div>
 
       {/* Row 2: CAD Design */}
-      {renderHorizontalRow("📐 CAD Design", colors.cad, renderMemberCard(roster.cadLead, colors.cad, true), roster.cadMembers)}
+      <div style={{ marginBottom: '44px' }}>
+        <h3 style={{ fontSize: '1.25rem', color: colors.cad, borderBottom: `2px solid ${colors.cad}`, paddingBottom: '6px', marginBottom: '20px', fontWeight: '600' }}>
+          📐 CAD Design
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+          {renderMemberCard(roster.cadLead, colors.cad, true)}
+          {roster.cadMembers.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, colors.cad)}</React.Fragment>)}
+        </div>
+      </div>
 
-      {/* Row 3: Build Team Alpha */}
-      {renderHorizontalRow("🔧 Build Team Alpha", colors.build, renderMemberCard(roster.buildLead1, colors.build, true), roster.buildMembers1)}
+      {/* Row 3: Unified Build Team Row */}
+      <div style={{ marginBottom: '44px' }}>
+        <h3 style={{ fontSize: '1.25rem', color: colors.build, borderBottom: `2px solid ${colors.build}`, paddingBottom: '6px', marginBottom: '20px', fontWeight: '600' }}>
+          🔧 Build Team Operations
+        </h3>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
+          gap: '24px',
+          alignItems: 'start'
+        }}>
+          {/* Management Stack Column on Left side */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {roster.buildLeads.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, colors.build, true)}</React.Fragment>)}
+          </div>
+          
+          {/* Members Workspace spreading on Right side */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
+            gap: '16px',
+            flexGrow: 2
+          }}>
+            {roster.buildMembers.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, colors.build)}</React.Fragment>)}
+          </div>
+        </div>
+      </div>
 
-      {/* Row 4: Build Team Beta */}
-      {renderHorizontalRow("🔧 Build Team Beta", colors.build, renderMemberCard(roster.buildLead2, colors.build, true), roster.buildMembers2)}
-
-      {/* Row 5: Autonomous Programming */}
-      {renderHorizontalRow("💻 Programming", colors.software, renderMemberCard(roster.softwareLead, colors.software, true), roster.softwareMembers)}
+      {/* Row 4: Autonomous Programming */}
+      <div style={{ marginBottom: '44px' }}>
+        <h3 style={{ fontSize: '1.25rem', color: colors.software, borderBottom: `2px solid ${colors.software}`, paddingBottom: '6px', marginBottom: '20px', fontWeight: '600' }}>
+          💻 Programming
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+          {renderMemberCard(roster.softwareLead, colors.software, true)}
+          {roster.softwareMembers.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, colors.software)}</React.Fragment>)}
+        </div>
+      </div>
 
     </section>
   );
