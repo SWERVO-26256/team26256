@@ -16,7 +16,7 @@ function Team() {
   });
   const [loading, setLoading] = useState(true);
 
-  // Exact 6-color palette mapping for all executive roles and subteams
+  // 6-color system mapping your exact requested visuals
   const colors = {
     captain: "#FFB020",      // Amber Gold
     business: "#E040FB",     // Neon Purple
@@ -36,61 +36,73 @@ function Team() {
         let cadLead = null;
         const cadMembers = [];
         
-        const buildLeads = [];
-        const buildMembersRaw = [];
+        let buildLead1 = null;
+        let buildLead2 = null;
+        // Temporary arrays to hold standard build members for a clean split
+        const alphaBuildMembers = [];
+        const betaBuildMembers = [];
         
         let softwareLead = null;
         const softwareMembers = [];
 
         data.forEach(member => {
           const nameLower = member.name.toLowerCase();
-          const roleLower = (member.role || member.title || "").toLowerCase().trim();
+          const titleLower = (member.title || "").toLowerCase().trim();
 
           const memberData = {
             name: member.name,
             img: member.image ? `/${member.image.replace(/^\//, '')}` : "",
-            role: member.role || member.title || "Team Member"
+            role: member.title || "Team Member"
           };
 
-          // 1. Executive Board Classifications (Heth, Allison, Mentors)
-          if (nameLower.includes("heth") || roleLower.includes("captain")) {
+          // 1. Executive Administration Row (Strict Name Matching from your JSON)
+          if (nameLower.includes("heth")) {
             captain = { ...memberData, role: "Team Captain" };
-          } else if (nameLower.includes("allison") || roleLower.includes("business")) {
-            business = { ...memberData, role: "Business & Media Lead" };
-          } else if (roleLower.includes("mentor") || roleLower.includes("advisor")) {
-            mentor = { ...memberData, role: "Team Advisor / Mentor" };
+          } else if (nameLower.includes("allison")) {
+            business = { ...memberData, role: "Business Team Lead" };
+          } else if (titleLower.includes("mentor") || titleLower.includes("advisor")) {
+            mentor = { ...memberData, role: "Team Mentor" };
           }
           
-          // 2. CAD Subteam
-          else if (roleLower.includes("cad")) {
-            if (roleLower.endsWith("lead")) cadLead = memberData;
-            else cadMembers.push(memberData);
+          // 2. CAD Row
+          else if (titleLower.includes("cad")) {
+            if (titleLower.includes("lead")) {
+              cadLead = memberData;
+            } else {
+              cadMembers.push(memberData);
+            }
           }
           
-          // 3. Build Subteam
-          else if (roleLower.includes("build") || roleLower.includes("driver")) {
-            if (roleLower.endsWith("lead")) buildLeads.push(memberData);
-            else buildMembersRaw.push(memberData);
+          // 3. Software Row
+          else if (titleLower.includes("software")) {
+            if (titleLower.includes("lead")) {
+              softwareLead = memberData;
+            } else {
+              softwareMembers.push(memberData);
+            }
           }
-          
-          // 4. Software Subteam
-          else if (roleLower.includes("software") || roleLower.includes("program")) {
-            if (roleLower.endsWith("lead")) softwareLead = memberData;
-            else softwareMembers.push(memberData);
+
+          // 4. Build Split Logic (Kyran vs Michael Leads & Custom Split)
+          else if (titleLower.includes("build")) {
+            if (nameLower.includes("kyran")) {
+              buildLead1 = { ...memberData, role: "Build Team Lead (Alpha)" };
+            } else if (nameLower.includes("michael")) {
+              buildLead2 = { ...memberData, role: "Build Team Lead (Beta)" };
+            } 
+            // Manual clean split across the 4 standard builders found in your JSON
+            else if (nameLower.includes("karim") || nameLower.includes("sophia")) {
+              alphaBuildMembers.push(memberData);
+            } else if (nameLower.includes("kacper") || nameLower.includes("atharv")) {
+              betaBuildMembers.push(memberData);
+            }
           }
         });
 
-        // Isolate Co-Build Leads
-        const buildLead1 = buildLeads[0] || null;
-        const buildLead2 = buildLeads[1] || null;
-
-        // Forceful Array Splitting: Slice exactly 4 to Alpha, and everything else to Beta
-        const buildMembers1 = buildMembersRaw.slice(0, 4);
-        const buildMembers2 = buildMembersRaw.slice(4);
-
         setRoster({
           captain, business, mentor, cadLead, cadMembers,
-          buildLead1, buildLead2, buildMembers1, buildMembers2,
+          buildLead1, buildLead2, 
+          buildMembers1: alphaBuildMembers, 
+          buildMembers2: betaBuildMembers,
           softwareLead, softwareMembers
         });
         setLoading(false);
@@ -112,6 +124,7 @@ function Team() {
     e.target.style.display = 'none';
   };
 
+  // Completely responsive card rendering
   const renderMemberCard = (member, color, isLead = false) => {
     if (!member) return null;
     return (
@@ -124,9 +137,7 @@ function Team() {
           alignItems: 'center',
           textAlign: 'center',
           borderTop: `4px solid ${color}`,
-          flexGrow: 1,
-          flexShrink: 1,
-          width: '100%' // Fluid sizing within the CSS grid tracks
+          width: '100%' 
         }}
       >
         <div style={{ 
@@ -159,7 +170,7 @@ function Team() {
     );
   };
 
-  // Grid row wrapper mapping cards dynamically based on screen real estate
+  // Layout wrapper to format row headers and dynamic CSS columns perfectly
   const renderHorizontalRow = (title, color, leadComponent, membersArray = []) => {
     return (
       <div style={{ marginBottom: '44px' }}>
@@ -168,7 +179,9 @@ function Team() {
         </h3>
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          // repeat(auto-fit) stretches the cards out dynamically to completely fill desktop space, 
+          // minmax(180px) forces clean responsive collapsing on small mobile screen viewports
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
           gap: '16px',
           alignItems: 'start'
         }}>
@@ -196,14 +209,14 @@ function Team() {
         </p>
       </div>
 
-      {/* Row 1: Executive Leadership Row (Captain, Business Lead, and Mentor side-by-side) */}
+      {/* Row 1: Executive Board (Captain, Business Lead, and Mentor side-by-side expanding) */}
       <div style={{ marginBottom: '44px' }}>
         <h3 style={{ fontSize: '1.25rem', color: colors.captain, borderBottom: `2px solid ${colors.captain}`, paddingBottom: '6px', marginBottom: '20px', fontWeight: '600', textTransform: 'uppercase' }}>
           💼 Executive Administration
         </h3>
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
           gap: '16px' 
         }}>
           {renderMemberCard(roster.captain, colors.captain, true)}
@@ -215,10 +228,10 @@ function Team() {
       {/* Row 2: CAD Design */}
       {renderHorizontalRow("📐 CAD Design", colors.cad, renderMemberCard(roster.cadLead, colors.cad, true), roster.cadMembers)}
 
-      {/* Row 3: Build Team Alpha (Kyran) */}
+      {/* Row 3: Build Team Alpha */}
       {renderHorizontalRow("🔧 Build Team Alpha", colors.build, renderMemberCard(roster.buildLead1, colors.build, true), roster.buildMembers1)}
 
-      {/* Row 4: Build Team Beta (Michael) */}
+      {/* Row 4: Build Team Beta */}
       {renderHorizontalRow("🔧 Build Team Beta", colors.build, renderMemberCard(roster.buildLead2, colors.build, true), roster.buildMembers2)}
 
       {/* Row 5: Autonomous Programming */}
