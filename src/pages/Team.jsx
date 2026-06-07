@@ -48,38 +48,39 @@ function Team() {
             role: member.role || member.title || "Team Member"
           };
 
-          // 1. Executive Allocation
+          // Executive Classifications
           if (nameLower.includes("heth") || roleLower.includes("captain")) {
             captain = { ...memberData, role: "Team Captain" };
           } else if (nameLower.includes("allison") || roleLower.includes("business")) {
             business = { ...memberData, role: "Business & Media Lead" };
           }
           
-          // 2. CAD Subteam Sorting
+          // CAD Subteam
           else if (roleLower.includes("cad")) {
             if (roleLower.endsWith("lead")) cadLead = memberData;
             else cadMembers.push(memberData);
           }
           
-          // 3. Build Subteam Sorting
+          // Build Subteam
           else if (roleLower.includes("build") || roleLower.includes("driver")) {
-            if (roleLower.endsWith("lead")) buildLeads.push(memberData;
+            if (roleLower.endsWith("lead")) buildLeads.push(memberData);
             else buildMembersRaw.push(memberData);
           }
           
-          // 4. Software Subteam Sorting
+          // Software Subteam
           else if (roleLower.includes("software") || roleLower.includes("program")) {
             if (roleLower.endsWith("lead")) softwareLead = memberData;
             else softwareMembers.push(memberData);
           }
         });
 
+        // Separate build leads
         const buildLead1 = buildLeads[0] || null;
         const buildLead2 = buildLeads[1] || null;
 
-        // Allocate exactly 4 members to Alpha and 2 members to Beta
+        // Hardcoded Split: First 4 members go to Alpha, remaining 2 go to Beta
         const buildMembers1 = buildMembersRaw.slice(0, 4);
-        const buildMembers2 = buildMembersRaw.slice(4);
+        const buildMembers2 = buildMembersRaw.slice(4, 6);
 
         setRoster({
           captain, business, cadLead, cadMembers,
@@ -89,7 +90,7 @@ function Team() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Error formatting horizontal layout matrix:", err);
+        console.error("Error formatting horizontal rows:", err);
         setLoading(false);
       });
   }, []);
@@ -117,14 +118,13 @@ function Team() {
           alignItems: 'center',
           textAlign: 'center',
           borderTop: `4px solid ${color}`,
-          minWidth: '180px',
-          flexSnapAlign: 'start'
+          minWidth: '180px'
         }}
       >
         <div style={{ 
           position: 'relative', width: '65px', height: '65px', borderRadius: '50%', 
           backgroundColor: '#2A2A2A', border: `2px solid ${color}`,
-          marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
+          marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
         }}>
           <span style={{ fontWeight: 'bold', fontSize: '16px', color: 'var(--text-main)' }}>
             {getInitials(member.name)}
@@ -151,64 +151,66 @@ function Team() {
     );
   };
 
+  // Layout wrapper to format row headers and horizontal flex cards cleanly
+  const renderHorizontalRow = (title, color, leadComponent, membersArray = []) => {
+    return (
+      <div style={{ marginBottom: '40px' }}>
+        <h3 style={{ fontSize: '1.2rem', color: color, borderBottom: `2px solid ${color}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600' }}>
+          {title}
+        </h3>
+        <div style={{ 
+          display: 'flex', 
+          gap: '16px', 
+          overflowX: 'auto', 
+          paddingBottom: '8px',
+          flexWrap: 'wrap' // Allows clean wrapping on mobile devices
+        }}>
+          {leadComponent}
+          {membersArray.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, color)}</React.Fragment>)}
+        </div>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <section className="page" style={{ display: 'block', padding: '40px', textAlign: 'center' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>Processing roster nodes...</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Arranging structural matrices...</p>
       </section>
     );
   }
-
-  // Helper template to structure horizontal section tracks beautifully
-  const renderHorizontalRow = (title, color, leadComponent, membersArray) => (
-    <div style={{ marginBottom: '40px' }}>
-      <h3 style={{ fontSize: '1.2rem', color: color, borderBottom: `2px solid ${color}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600' }}>
-        {title}
-      </h3>
-      <div style={{ 
-        display: 'flex', 
-        gap: '16px', 
-        overflowX: 'auto', 
-        paddingBottom: '8px',
-        scrollSnapType: 'x mandatory'
-      }}>
-        {leadComponent && renderMemberCard(leadComponent, color, true)}
-        {membersArray.map((m, i) => <React.Fragment key={i}>{renderMemberCard(m, color)}</React.Fragment>)}
-      </div>
-    </div>
-  );
 
   return (
     <section className="page fade-in" style={{ display: 'block', padding: '20px 16px', maxWidth: '1200px', margin: '0 auto' }}>
       <div className="page-header" style={{ marginBottom: '48px', textAlign: 'center' }}>
         <h2 style={{ fontSize: '2.5rem', marginBottom: '12px' }}>The Engineers</h2>
         <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-          SWERVO 26256 Engineering Rows
+          SWERVO 26256 Roster
         </p>
       </div>
 
-      {/* Row 1: Executive Board Track */}
-      <div style={{ marginBottom: '40px' }}>
+      {/* Row 1: Executive Board (Captain & Business Side-by-Side Equaled) */}
+      <div style={{ marginBottom: '48px' }}>
         <h3 style={{ fontSize: '1.2rem', color: colors.captain, borderBottom: `2px solid ${colors.captain}`, paddingBottom: '6px', marginBottom: '16px', fontWeight: '600', textTransform: 'uppercase' }}>
-          💼 Command & Operations
+          💼 Executive Board
         </h3>
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
           {renderMemberCard(roster.captain, colors.captain, true)}
           {renderMemberCard(roster.business, colors.business, true)}
         </div>
       </div>
 
-      {/* Row 2: CAD Lineup */}
-      {renderHorizontalRow("📐 CAD Design", colors.cad, roster.cadLead, roster.cadMembers)}
+      {/* Row 2: CAD Design */}
+      {renderHorizontalRow("📐 CAD Design", colors.cad, renderMemberCard(roster.cadLead, colors.cad, true), roster.cadMembers)}
 
-      {/* Row 3: Build Team Alpha Lineup */}
-      {renderHorizontalRow("🔧 Build Team Alpha", colors.build, roster.buildLead1, roster.buildMembers1)}
+      {/* Row 3: Build Team Alpha */}
+      {renderHorizontalRow("🔧 Build Team Alpha", colors.build, renderMemberCard(roster.buildLead1, colors.build, true), roster.buildMembers1)}
 
-      {/* Row 4: Build Team Beta Lineup */}
-      {renderHorizontalRow("🔧 Build Team Beta", colors.build, roster.buildLead2, roster.buildMembers2)}
+      {/* Row 4: Build Team Beta */}
+      {renderHorizontalRow("🔧 Build Team Beta", colors.build, renderMemberCard(roster.buildLead2, colors.build, true), roster.buildMembers2)}
 
-      {/* Row 5: Autonomous Software Lineup */}
-      {renderHorizontalRow("💻 Programming", colors.software, roster.softwareLead, roster.softwareMembers)}
+      {/* Row 5: Autonomous Software */}
+      {renderHorizontalRow("💻 Programming", colors.software, renderMemberCard(roster.softwareLead, colors.software, true), roster.softwareMembers)}
 
     </section>
   );
