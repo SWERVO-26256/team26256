@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+const TEAM_ROSTER_ENABLED = false;
 
 function Team() {
   const [roster, setRoster] = useState({
@@ -25,6 +28,11 @@ function Team() {
   };
 
   useEffect(() => {
+    if (!TEAM_ROSTER_ENABLED) {
+      setLoading(false);
+      return;
+    }
+
     fetch('/team-members.json')
       .then((res) => res.json())
       .then((data) => {
@@ -174,6 +182,48 @@ function Team() {
 
   const buildCount = roster.buildLeads.length + roster.buildMembers.length;
   const fullBuildMobileArray = [...roster.buildLeads, ...roster.buildMembers];
+
+  if (!TEAM_ROSTER_ENABLED) {
+    return (
+      <section className="page fade-in" style={{ display: 'block', padding: '60px 16px 80px' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto', textAlign: 'left' }}>
+          <div style={{ display: 'inline-block', padding: '8px 14px', borderRadius: '999px', background: 'rgba(255, 176, 32, 0.12)', border: '1px solid rgba(255, 176, 32, 0.35)', color: '#FFB020', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            We are hiring
+          </div>
+
+          <h2 style={{ margin: '18px 0 16px', fontSize: 'clamp(2.2rem, 5vw, 4rem)', lineHeight: 1.1, color: '#FFFFFF' }}>
+            We’re looking for new members.
+          </h2>
+
+          <p style={{ maxWidth: '700px', margin: '0 0 28px', color: '#D1D1D1', fontSize: '1.05rem', lineHeight: 1.7 }}>
+            SWERVO 26256 is currently recruiting builders, programmers, designers, and business-minded students who want to learn, build, and compete together. If you’re excited about engineering, teamwork, and problem-solving, we’d love to meet you.
+          </p>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '32px' }}>
+            <Link to="/registration" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+              Apply now
+            </Link>
+            <Link to="/contact" className="btn btn-secondary" style={{ textDecoration: 'none' }}>
+              Contact us
+            </Link>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginTop: '12px' }}>
+            {[
+              { title: 'Builders', text: 'Mechanical design, fabrication, and testing.' },
+              { title: 'Programmers', text: 'Autonomous systems, controls, and software integration.' },
+              { title: 'Business & Strategy', text: 'Outreach, planning, and team operations.' }
+            ].map((role) => (
+              <div key={role.title} style={{ padding: '20px 18px', borderRadius: '12px', background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 10px 24px rgba(0,0,0,0.18)' }}>
+                <h3 style={{ margin: '0 0 10px', color: '#FFFFFF', fontSize: '1.1rem' }}>{role.title}</h3>
+                <p style={{ margin: 0, color: '#B7B7B7', lineHeight: 1.6 }}>{role.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   if (loading) {
     return (
