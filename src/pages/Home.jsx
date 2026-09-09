@@ -54,9 +54,9 @@ function Home() {
         </div>
       </div>
 
-      <div className="sponsor-marquee-container" style={{ padding: '16px 0', borderTop: '1px solid var(--border-dark)', borderBottom: '1px solid var(--border-dark)', background: 'rgba(17, 24, 39, 0.5)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', textAlign: 'center' }}>
-          <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
+      <div className="sponsor-marquee-container" style={{ padding: '18px 0', borderTop: '1px solid var(--border-dark)', borderBottom: '1px solid var(--border-dark)', background: 'rgba(17, 24, 39, 0.5)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', textAlign: 'center' }}>
+          <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1.2px', fontWeight: 600 }}>
             Presenting Title Partner:
           </span>
           <a 
@@ -64,18 +64,18 @@ function Home() {
             target="_blank" 
             rel="noopener noreferrer"
             style={{ 
-              color: '#FFFFFF', 
-              fontSize: '1.2rem', 
-              fontWeight: 800, 
-              textDecoration: 'none',
-              letterSpacing: '0.5px',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '12px',
+              textDecoration: 'none'
             }}
           >
-            SAUGA<span style={{ color: 'var(--accent-blue)' }}>HACKS</span>
-            <span style={{ fontSize: '0.85rem', padding: '2px 8px', borderRadius: '4px', background: 'rgba(125, 211, 252, 0.15)', color: 'var(--accent-blue)', border: '1px solid rgba(125, 211, 252, 0.3)' }}>
+            <img 
+              src="/assets/sponsors/Saugahacks_Logo.png" 
+              alt="SaugaHacks Logo" 
+              style={{ height: '36px', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))' }}
+            />
+            <span style={{ fontSize: '0.85rem', padding: '4px 10px', borderRadius: '6px', background: 'rgba(125, 211, 252, 0.12)', color: 'var(--accent-blue)', border: '1px solid rgba(125, 211, 252, 0.3)', fontWeight: 600 }}>
               saugahacks.org &rarr;
             </span>
           </a>
