@@ -28,7 +28,7 @@ function Header() {
           <NavLink to="/portfolio" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Portfolio</NavLink>
           <NavLink to="/robot" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Robot</NavLink>
           <NavLink to="/team" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Team</NavLink>
-          <NavLink to="/sponsors" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Sponsors</NavLink>
+          <NavLink to="/sponsors" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>SaugaHacks</NavLink>
           <NavLink to="/stats" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Stats</NavLink>
           <NavLink to="/notebook" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Notebook</NavLink>
           <NavLink to="/contact" onClick={closeMenu} className={({ isActive }) => (isActive ? 'active' : '')}>Contact</NavLink>

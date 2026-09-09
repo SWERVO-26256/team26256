@@ -4,69 +4,102 @@ function Sponsors() {
   return (
     <section className="page fade-in" style={{ display: 'block', paddingBottom: '40px', width: '100%' }}>
       
-      {/* Outer Container */}
+      {/* Outer Centered Container */}
       <div style={{ maxWidth: '1050px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
         
-        {/* Compact 2-Column Showcase Box */}
-        <div className="card" style={{
+        {/* Single Outer Showcase Container (No Inner Double Boxes) */}
+        <div style={{
           position: 'relative',
           width: '100%',
-          padding: 'clamp(24px, 4vw, 40px)',
+          padding: 'clamp(24px, 5vw, 48px)',
           background: 'linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(11, 18, 32, 0.98) 100%)',
           border: '1px solid rgba(125, 211, 252, 0.25)',
-          borderRadius: '16px',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(125, 211, 252, 0.08)',
+          borderRadius: '20px',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(125, 211, 252, 0.08)',
           boxSizing: 'border-box',
           overflow: 'hidden'
         }}>
           
-          {/* Subtle Ambient Glow Effect */}
+          {/* Ambient Wireframe Glow */}
           <div style={{
             position: 'absolute',
-            top: '-100px',
-            left: '-100px',
-            width: '300px',
-            height: '300px',
-            background: 'radial-gradient(circle, rgba(125,211,252,0.12) 0%, rgba(0,0,0,0) 70%)',
+            top: '50%',
+            left: '25%',
+            width: '240px',
+            height: '240px',
+            background: 'var(--accent-blue)',
+            filter: 'blur(100px)',
+            opacity: 0.12,
+            transform: 'translate(-50%, -50%)',
             pointerEvents: 'none'
           }}></div>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 'clamp(24px, 4vw, 40px)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 'clamp(32px, 5vw, 56px)',
             alignItems: 'center'
           }}>
             
-            {/* Left Column: Logo Container */}
+            {/* Left Column: Circular Glowing Logo (Same Style as Homepage Hero Logo) */}
             <div style={{
               display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
               justify: 'center',
-              padding: 'clamp(24px, 4vw, 36px)',
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '12px',
-              minHeight: '260px',
-              boxSizing: 'border-box',
-              textAlign: 'center'
+              alignItems: 'center',
+              width: '100%'
             }}>
-              <img 
-                src="/assets/sponsors/Saugahacks_Logo.png" 
-                alt="SaugaHacks Logo" 
-                style={{ 
-                  maxHeight: '110px', 
-                  maxWidth: '100%', 
-                  objectFit: 'contain',
-                  filter: 'drop-shadow(0 6px 16px rgba(0,0,0,0.5))',
-                  display: 'block',
-                  margin: '0 auto'
-                }} 
-              />
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '260px',
+                aspectRatio: '1 / 1',
+                borderRadius: '50%',
+                margin: '0 auto',
+                display: 'flex',
+                alignItems: 'center',
+                justify: 'center'
+              }}>
+                {/* Outer Glow Ring */}
+                <div style={{
+                  position: 'absolute',
+                  inset: '-4px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, rgba(125, 211, 252, 0.4) 0%, rgba(56, 189, 248, 0.1) 100%)',
+                  filter: 'blur(12px)',
+                  opacity: 0.8
+                }}></div>
+
+                {/* Circular Image Container */}
+                <div style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  border: '2px solid rgba(125, 211, 252, 0.3)',
+                  boxShadow: '0 0 50px rgba(125, 211, 252, 0.18)',
+                  background: '#000000',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justify: 'center'
+                }}>
+                  <img 
+                    src="/assets/sponsors/Saugahacks_Logo.png" 
+                    alt="SaugaHacks Logo" 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                      borderRadius: '50%',
+                      display: 'block'
+                    }} 
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Right Column: Explanation & Single CTA Button */}
+            {/* Right Column: Direct Explanation Content & Single CTA */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
               
               {/* Sponsored By Badge */}
@@ -79,19 +112,20 @@ function Sponsors() {
                 color: 'var(--accent-blue)',
                 fontSize: '0.75rem',
                 fontWeight: 700,
-                letterSpacing: '0.1em',
+                letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                marginBottom: '12px'
+                marginBottom: '14px'
               }}>
                 Sponsored by
               </span>
 
               <h2 style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                fontSize: 'clamp(2.2rem, 4.5vw, 3.2rem)',
                 fontWeight: 800,
                 color: '#FFFFFF',
-                margin: '0 0 12px 0',
-                lineHeight: 1.15
+                margin: '0 0 14px 0',
+                lineHeight: 1.1,
+                letterSpacing: '-0.5px'
               }}>
                 SaugaHacks
               </h2>
@@ -100,7 +134,7 @@ function Sponsors() {
                 fontSize: 'clamp(0.95rem, 1.8vw, 1.05rem)',
                 color: '#D1D5DB',
                 lineHeight: 1.65,
-                margin: '0 0 20px 0'
+                margin: '0 0 24px 0'
               }}>
                 SaugaHacks is the premier high school hackathon initiative developed by <strong>FTC Team 26256 (SWERVO)</strong>. Created to bring together young programmers, designers, and innovators, every registration and partnership associated with SaugaHacks directly funds our competitive robotics season—powering our parts, manufacturing, and tournament operations for <strong>2026–2027</strong>.
               </p>
@@ -112,7 +146,7 @@ function Sponsors() {
                 rel="noopener noreferrer" 
                 className="btn btn-primary"
                 style={{
-                  padding: '12px 28px',
+                  padding: '13px 32px',
                   fontSize: '1rem',
                   fontWeight: 700,
                   borderRadius: '8px',
