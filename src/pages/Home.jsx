@@ -54,18 +54,31 @@ function Home() {
         </div>
       </div>
 
-      <div className="sponsor-marquee-container">
-        <div className="sponsor-marquee-track">
-          {sponsors.length > 0 && Array(3).fill().map((_, loopIndex) => (
-            <React.Fragment key={loopIndex}>
-              {sponsors.map((s, i) => (
-                <a href={s.url} target="_blank" rel="noopener noreferrer" title={s.name} key={`${loopIndex}-${i}`}>
-                  <img src={s.logo} alt={s.name} className="marquee-logo" onError={(e) => { e.target.style.display = 'none'; e.target.nextElementSibling.style.display = 'inline'; }} />
-                  <span className="marquee-fallback" style={{ display: 'none' }}>{s.name}</span>
-                </a>
-              ))}
-            </React.Fragment>
-          ))}
+      <div className="sponsor-marquee-container" style={{ padding: '16px 0', borderTop: '1px solid var(--border-dark)', borderBottom: '1px solid var(--border-dark)', background: 'rgba(17, 24, 39, 0.5)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', textAlign: 'center' }}>
+          <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
+            Presenting Title Partner:
+          </span>
+          <a 
+            href="https://saugahacks.org" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ 
+              color: '#FFFFFF', 
+              fontSize: '1.2rem', 
+              fontWeight: 800, 
+              textDecoration: 'none',
+              letterSpacing: '0.5px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            SAUGA<span style={{ color: 'var(--accent-blue)' }}>HACKS</span>
+            <span style={{ fontSize: '0.85rem', padding: '2px 8px', borderRadius: '4px', background: 'rgba(125, 211, 252, 0.15)', color: 'var(--accent-blue)', border: '1px solid rgba(125, 211, 252, 0.3)' }}>
+              saugahacks.org &rarr;
+            </span>
+          </a>
         </div>
       </div>
 

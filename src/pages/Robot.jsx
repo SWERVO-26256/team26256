@@ -5,12 +5,21 @@ function Robot() {
     <section className="page fade-in" style={{ display: 'block' }}>
       <div className="page-header">
         <h2>System Architecture</h2>
-        <p>Iteration history and mechanical subsystem breakdown.</p>
+        <p>Iteration history and mechanical subsystem breakdown for FTC 26256.</p>
       </div>
 
-      <div className="robot-hero">
-        <div className="robot-hero-img">
-          <span>[ Drop full robot image in assets/robot ]</span>
+      <div className="robot-hero" style={{
+        margin: '0 0 32px 0',
+        padding: '60px 24px',
+        borderRadius: '16px',
+        background: 'linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(11, 18, 32, 0.95) 100%)',
+        border: '1px solid var(--border-dark)',
+        textAlign: 'center'
+      }}>
+        <div className="robot-hero-img" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🤖</div>
+          <h3 style={{ color: 'var(--accent-blue)', margin: '0 0 8px 0' }}>SWERVO Drivetrain & Assembly</h3>
+          <p style={{ color: 'var(--text-secondary)', margin: 0, maxWidth: '500px' }}>Full 3D CAD render and chassis specs will be revealed prior to our first official competition kickoff.</p>
         </div>
       </div>
 
