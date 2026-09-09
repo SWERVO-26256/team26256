@@ -57,7 +57,7 @@ function Home() {
       <div className="sponsor-marquee-container" style={{ padding: '18px 0', borderTop: '1px solid var(--border-dark)', borderBottom: '1px solid var(--border-dark)', background: 'rgba(17, 24, 39, 0.5)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', textAlign: 'center' }}>
           <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1.2px', fontWeight: 600 }}>
-            Presenting Title Partner:
+            Sponsored by:
           </span>
           <a 
             href="https://saugahacks.org" 
